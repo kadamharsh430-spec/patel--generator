@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genset Details | Patel Generator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:25px;background:#07111f;color:#eaf6ff;font-family:Arial}
+.container{max-width:850px;margin:auto}
+.card{background:#102238;border:1px solid #1d3a54;padding:25px;border-radius:15px;margin-top:20px}
+h1{color:#00d9ff}
+h3{color:#00d9ff;border-bottom:1px solid #29445d;padding-bottom:10px}
+p{color:#c5d7e7}
+span{color:#8ca6bd}
+a{color:#00d9ff;text-decoration:none}
+button{background:#00d9ff;color:#04121e;padding:12px 18px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+input{background:#071827;color:white;border:1px solid #31516c;padding:12px;border-radius:7px}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="/records">← Back to Records</a>
+<div class="card">
+<h1>GENSET #{{record.id}}</h1>
+<p>Status: <b>{{record.status}}</b></p>
+
+<h3>Customer Information</h3>
+<p><span>Name:</span> {{record.customer}}</p>
+<p><span>Mobile:</span> {{record.mobile or '-'}}</p>
+<p><span>Address:</span> {{record.address or '-'}}</p>
+
+<h3>Generator Information</h3>
+<p><span>Company:</span> {{record.company or '-'}}</p>
+<p><span>Model:</span> {{record.model or '-'}}</p>
+<p><span>Serial:</span> {{record.serial or '-'}}</p>
+<p><span>KVA:</span> {{record.kva or '-'}}</p>
+
+<h3>Workshop Information</h3>
+<p><span>Complaint:</span> {{record.complaint or '-'}}</p>
+<p><span>Work:</span> {{record.work or '-'}}</p>
+<p><span>Amount:</span> ₹{{record.amount}}</p>
+<p><span>Entry:</span> {{record.entry_date.strftime('%d-%m-%Y %I:%M %p')}}</p>
+
+{% if record.exit_date %}
+<h3>Delivery Information</h3>
+<p><span>Delivered to:</span> {{record.delivered_to or '-'}}</p>
+<p><span>Exit:</span> {{record.exit_date.strftime('%d-%m-%Y %I:%M %p')}}</p>
+{% endif %}
+
+{% if record.status == "IN SHOP" %}
+<h3>Deliver Genset</h3>
+<form method="POST" action="/deliver/{{record.id}}">
+<input name="delivered_to" placeholder="Delivered to person" required>
+<button type="submit">MARK DELIVERED</button>
+</form>
+{% endif %}
+</div>
+</div>
+</body>
+</html>

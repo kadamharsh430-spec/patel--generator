@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genset Records</title>
+<style>
+body{background:#07111f;color:white;font-family:Arial;padding:20px}
+.box{max-width:1000px;margin:auto}
+.card{background:#102238;padding:18px;border-radius:12px;margin:15px 0;border:1px solid #29445d}
+button{background:#00d9ff;border:0;padding:10px;border-radius:6px;cursor:pointer}
+a{color:#00d9ff}
+small{color:#9db4c9}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>GENSET RECORDS</h1>
+<a href="/">Dashboard</a> | <a href="/entry">New Entry</a>
+
+{% for r in records %}
+<div class="card">
+<h2>#{{r.id}} — {{r.customer}}</h2>
+<p>Mobile: {{r.mobile or '-'}}</p>
+<p>Generator: {{r.company or '-'}} | {{r.model or '-'}}</p>
+<p>Serial: {{r.serial or '-'}} | KVA: {{r.kva or '-'}}</p>
+<p>Complaint: {{r.complaint or '-'}}</p>
+<p>Work: {{r.work or '-'}}</p>
+<p>Amount: ₹{{r.amount}}</p>
+<p>Status: <b>{{r.status}}</b></p>
+<small>Entry: {{r.entry_date.strftime('%d-%m-%Y %I:%M %p')}}</small>
+
+{% if r.status == "IN SHOP" %}
+<form method="POST" action="/deliver/{{r.id}}">
+<button type="submit">MARK DELIVERED</button>
+</form>
+{% endif %}
+</div>
+{% else %}
+<p>No genset records found.</p>
+{% endfor %}
+</div>
+</body>
+</html>
