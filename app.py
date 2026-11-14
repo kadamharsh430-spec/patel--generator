@@ -4,7 +4,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 app = Flask(__name__)
 
@@ -12,7 +12,7 @@ app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY", "patel-generator-secret-key"
 )
 
-# Local SQLite / Cloud PostgreSQL
+# DATABASE CONFIGURATION
 database_url = os.environ.get("DATABASE_URL")
 
 if database_url:
@@ -24,6 +24,7 @@ if database_url:
         database_url = database_url.replace(
             "postgresql://", "postgresql+psycopg://", 1
         )
+
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 else:
     os.makedirs(app.instance_path, exist_ok=True)
@@ -63,14 +64,8 @@ class Genset(db.Model):
 @app.route("/")
 def index():
     total = Genset.query.count()
-
-    inside = Genset.query.filter_by(
-        status="IN SHOP"
-    ).count()
-
-    delivered = Genset.query.filter_by(
-        status="DELIVERED"
-    ).count()
+    inside = Genset.query.filter_by(status="IN SHOP").count()
+    delivered = Genset.query.filter_by(status="DELIVERED").count()
 
     revenue = db.session.query(
         func.coalesce(func.sum(Genset.amount), 0)
@@ -95,8 +90,14 @@ def index():
 def entry():
     if request.method == "POST":
         try:
+            customer_name = request.form.get("customer", "").strip()
+
+            if not customer_name:
+                flash("Customer name is required!")
+                return redirect(url_for("entry"))
+
             record = Genset(
-                customer=request.form.get("customer", "").strip(),
+                customer=customer_name,
                 mobile=request.form.get("mobile", "").strip(),
                 address=request.form.get("address", "").strip(),
                 company=request.form.get("company", "").strip(),
@@ -109,10 +110,6 @@ def entry():
                 status="IN SHOP"
             )
 
-            if not record.customer:
-                flash("Customer name is required.")
-                return redirect(url_for("entry"))
-
             db.session.add(record)
             db.session.commit()
 
@@ -121,18 +118,13 @@ def entry():
 
         except ValueError:
             db.session.rollback()
-            flash("Please enter a valid amount.")
+            flash("Please enter a valid amount!")
             return redirect(url_for("entry"))
-
-        except Exception:
-            db.session.rollback()
-            flash("Entry could not be saved.")
-            raise
 
     return render_template("entry.html")
 
 
-# ALL RECORDS + SEARCH
+# RECORDS + SEARCH + STATUS FILTER
 @app.route("/records")
 def records():
     search = request.args.get("search", "").strip()
@@ -141,13 +133,14 @@ def records():
     query = Genset.query
 
     if search:
+        pattern = f"%{search}%"
         query = query.filter(
-            db.or_(
-                Genset.customer.ilike(f"%{search}%"),
-                Genset.mobile.ilike(f"%{search}%"),
-                Genset.serial.ilike(f"%{search}%"),
-                Genset.model.ilike(f"%{search}%"),
-                Genset.company.ilike(f"%{search}%")
+            or_(
+                Genset.customer.ilike(pattern),
+                Genset.mobile.ilike(pattern),
+                Genset.serial.ilike(pattern),
+                Genset.model.ilike(pattern),
+                Genset.company.ilike(pattern)
             )
         )
 
@@ -182,6 +175,22 @@ def deliver(id):
     return redirect(request.referrer or url_for("records"))
 
 
+# DELETE DELIVERED GENERATOR ONLY
+@app.route("/delete/<int:id>", methods=["POST"])
+def delete_record(id):
+    record = Genset.query.get_or_404(id)
+
+    if record.status != "DELIVERED":
+        flash("Only delivered generators can be deleted!")
+        return redirect(url_for("records"))
+
+    db.session.delete(record)
+    db.session.commit()
+
+    flash("Delivered generator deleted successfully!")
+    return redirect(url_for("records"))
+
+
 # GENERATOR DETAILS
 @app.route("/details/<int:id>")
 def details(id):
@@ -203,10 +212,11 @@ def customers():
     ).group_by(Genset.customer, Genset.mobile)
 
     if search:
+        pattern = f"%{search}%"
         query = query.having(
-            db.or_(
-                Genset.customer.ilike(f"%{search}%"),
-                Genset.mobile.ilike(f"%{search}%")
+            or_(
+                Genset.customer.ilike(pattern),
+                Genset.mobile.ilike(pattern)
             )
         )
 
@@ -234,7 +244,7 @@ def customer_history(id):
         query = query.filter(Genset.mobile == selected.mobile)
     else:
         query = query.filter(
-            db.or_(Genset.mobile == None, Genset.mobile == "")
+            or_(Genset.mobile == None, Genset.mobile == "")
         )
 
     history = query.order_by(Genset.id.desc()).all()
