@@ -82,7 +82,6 @@ def index():
 
     for row in kva_values:
         kva = row[0]
-
         kva_stats.append({
             "kva": kva,
             "total": Genset.query.filter_by(kva=kva).count(),
@@ -148,13 +147,13 @@ def entry():
         db.session.add(record)
         db.session.commit()
 
-        flash("Generator entry saved successfully!")
+        flash("Generator entry saved!")
         return redirect(url_for("records"))
 
     return render_template("entry.html", record=None)
 
 
-# EDIT EXISTING ENTRY
+# EDIT OLD ENTRY
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit_entry(id):
     record = Genset.query.get_or_404(id)
@@ -185,8 +184,8 @@ def edit_entry(id):
 
         db.session.commit()
 
-        flash("Generator entry updated successfully!")
-        return redirect(url_for("details", id=record.id))
+        flash("Generator entry updated!")
+        return redirect(url_for("records"))
 
     return render_template("entry.html", record=record)
 
@@ -342,7 +341,7 @@ def customer_history(id):
     )
 
 
-# DATABASE INITIALIZATION
+# DATABASE
 with app.app_context():
     db.create_all()
 
