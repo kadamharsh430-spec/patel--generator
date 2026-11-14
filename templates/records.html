@@ -1,44 +1,373 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Genset Records</title>
-<style>
-body{background:#07111f;color:white;font-family:Arial;padding:20px}
-.box{max-width:1000px;margin:auto}
-.card{background:#102238;padding:18px;border-radius:12px;margin:15px 0;border:1px solid #29445d}
-button{background:#00d9ff;border:0;padding:10px;border-radius:6px;cursor:pointer}
-a{color:#00d9ff}
-small{color:#9db4c9}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Records | PATEL GENERATOR</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #08111f;
+            color: #eaf4ff;
+            font-family: Arial, sans-serif;
+            padding: 25px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            color: #22d3ee;
+            margin-bottom: 7px;
+        }
+
+        .subtitle {
+            color: #91a4bc;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .back {
+            background: #12314a;
+            color: #67e8f9;
+        }
+
+        .search-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #101e30;
+            padding: 17px;
+            border: 1px solid #23364c;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            background: #081525;
+            color: white;
+            border: 1px solid #31465e;
+            padding: 12px;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .search-btn {
+            background: #0891b2;
+            color: white;
+        }
+
+        .reset {
+            background: #26384c;
+            color: white;
+        }
+
+        .message {
+            background: #123b3b;
+            color: #67e8c4;
+            border: 1px solid #167b73;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: #101e30;
+            border: 1px solid #23364c;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #26364a;
+        }
+
+        th {
+            color: #67e8f9;
+            background: #14253a;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #d8e5f4;
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .in-shop {
+            color: #facc15;
+            background: #44370c;
+        }
+
+        .delivered {
+            color: #4ade80;
+            background: #123d2a;
+        }
+
+        .details {
+            background: #164e63;
+            color: #a5f3fc;
+        }
+
+        .deliver {
+            background: #087f5b;
+            color: white;
+        }
+
+        .delete {
+            background: #991b1b;
+            color: white;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 125px;
+        }
+
+        .actions form {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .actions input {
+            min-width: 120px;
+            width: 100%;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #91a4bc;
+        }
+
+        @media(max-width: 600px) {
+            body {
+                padding: 13px;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="box">
-<h1>GENSET RECORDS</h1>
-<a href="/">Dashboard</a> | <a href="/entry">New Entry</a>
 
-{% for r in records %}
-<div class="card">
-<h2>#{{r.id}} — {{r.customer}}</h2>
-<p>Mobile: {{r.mobile or '-'}}</p>
-<p>Generator: {{r.company or '-'}} | {{r.model or '-'}}</p>
-<p>Serial: {{r.serial or '-'}} | KVA: {{r.kva or '-'}}</p>
-<p>Complaint: {{r.complaint or '-'}}</p>
-<p>Work: {{r.work or '-'}}</p>
-<p>Amount: ₹{{r.amount}}</p>
-<p>Status: <b>{{r.status}}</b></p>
-<small>Entry: {{r.entry_date.strftime('%d-%m-%Y %I:%M %p')}}</small>
+<div class="container">
 
-{% if r.status == "IN SHOP" %}
-<form method="POST" action="/deliver/{{r.id}}">
-<button type="submit">MARK DELIVERED</button>
-</form>
-{% endif %}
+    <header>
+        <div>
+            <h1>GENERATOR RECORDS</h1>
+            <p class="subtitle">PATEL GENERATOR | Manage all entries</p>
+        </div>
+
+        <a href="/" class="btn back">← Dashboard</a>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/records" method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search customer, mobile, model, serial..."
+            value="{{ search }}"
+        >
+
+        <select name="status">
+            <option value="">All Status</option>
+            <option value="IN SHOP"
+                {% if status == "IN SHOP" %}selected{% endif %}>
+                IN SHOP
+            </option>
+            <option value="DELIVERED"
+                {% if status == "DELIVERED" %}selected{% endif %}>
+                DELIVERED
+            </option>
+        </select>
+
+        <button class="btn search-btn" type="submit">SEARCH</button>
+        <a href="/records" class="btn reset">RESET</a>
+
+    </form>
+
+    <div class="table-wrap">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Generator</th>
+                    <th>KVA</th>
+                    <th>Entry Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for r in records %}
+
+                <tr>
+                    <td>#{{ r.id }}</td>
+
+                    <td>
+                        <strong>{{ r.customer }}</strong><br>
+                        <small>{{ r.mobile or "No mobile" }}</small>
+                    </td>
+
+                    <td>
+                        {{ r.company or "-" }}<br>
+                        <small>{{ r.model or "-" }}</small>
+                    </td>
+
+                    <td>{{ r.kva or "-" }}</td>
+
+                    <td>
+                        {% if r.entry_date %}
+                            {{ r.entry_date.strftime("%d-%m-%Y") }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
+
+                    <td>
+                        {% if r.status == "DELIVERED" %}
+                            <span class="status delivered">DELIVERED</span>
+                        {% else %}
+                            <span class="status in-shop">IN SHOP</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <div class="actions">
+
+                            <a href="/details/{{ r.id }}"
+                               class="btn details">
+                                VIEW DETAILS
+                            </a>
+
+                            {% if r.status == "IN SHOP" %}
+
+                                <form action="/deliver/{{ r.id }}"
+                                      method="POST">
+
+                                    <input
+                                        type="text"
+                                        name="delivered_to"
+                                        placeholder="Delivered to"
+                                        required
+                                    >
+
+                                    <button type="submit"
+                                            class="btn deliver">
+                                        MARK DELIVERED
+                                    </button>
+
+                                </form>
+
+                            {% elif r.status == "DELIVERED" %}
+
+                                <form action="/delete/{{ r.id }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Permanently delete this delivered generator record? This cannot be undone.');">
+
+                                    <button type="submit"
+                                            class="btn delete">
+                                        🗑 DELETE
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+                        </div>
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr>
+                    <td colspan="8" class="empty">
+                        No generator records found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
 </div>
-{% else %}
-<p>No genset records found.</p>
-{% endfor %}
-</div>
+
 </body>
 </html>
