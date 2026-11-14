@@ -19,8 +19,8 @@ app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY", "change-this-secret-key"
 )
 
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "Patel@123")
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "pg")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "pg134")
 
 database_url = os.environ.get("DATABASE_URL")
 
