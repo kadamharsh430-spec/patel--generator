@@ -31,8 +31,8 @@ app.config["SECRET_KEY"] = os.environ.get(
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "Patel@123")
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "pg")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "Pg123")
 
 
 # ==========================================
