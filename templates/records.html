@@ -2,372 +2,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Records | PATEL GENERATOR</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patel Generator | All Records</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: #08111f;
-            color: #eaf4ff;
-            font-family: Arial, sans-serif;
-            padding: 25px;
-        }
-
-        .container {
-            max-width: 1250px;
-            margin: auto;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 28px;
-        }
-
-        h1 {
-            color: #22d3ee;
-            margin-bottom: 7px;
-        }
-
-        .subtitle {
-            color: #91a4bc;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 11px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .back {
-            background: #12314a;
-            color: #67e8f9;
-        }
-
-        .search-box {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            background: #101e30;
-            padding: 17px;
-            border: 1px solid #23364c;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        input, select {
-            background: #081525;
-            color: white;
-            border: 1px solid #31465e;
-            padding: 12px;
-            border-radius: 7px;
-            outline: none;
-        }
-
-        input {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .search-btn {
-            background: #0891b2;
-            color: white;
-        }
-
-        .reset {
-            background: #26384c;
-            color: white;
-        }
-
-        .message {
-            background: #123b3b;
-            color: #67e8c4;
-            border: 1px solid #167b73;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-            background: #101e30;
-            border: 1px solid #23364c;
-            border-radius: 12px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-        }
-
-        th, td {
-            padding: 15px 12px;
-            text-align: left;
-            border-bottom: 1px solid #26364a;
-        }
-
-        th {
-            color: #67e8f9;
-            background: #14253a;
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-
-        td {
-            color: #d8e5f4;
-            font-size: 13px;
-        }
-
-        .status {
-            padding: 6px 9px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .in-shop {
-            color: #facc15;
-            background: #44370c;
-        }
-
-        .delivered {
-            color: #4ade80;
-            background: #123d2a;
-        }
-
-        .details {
-            background: #164e63;
-            color: #a5f3fc;
-        }
-
-        .deliver {
-            background: #087f5b;
-            color: white;
-        }
-
-        .delete {
-            background: #991b1b;
-            color: white;
-        }
-
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 125px;
-        }
-
-        .actions form {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .actions input {
-            min-width: 120px;
-            width: 100%;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 40px;
-            color: #91a4bc;
-        }
-
-        @media(max-width: 600px) {
-            body {
-                padding: 13px;
-            }
-
-            header {
-                align-items: flex-start;
-            }
-        }
-    </style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:#e8f0ff;font-family:Arial,sans-serif;padding:22px}
+.container{max-width:1250px;margin:auto}
+.header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}
+h1{font-size:25px;margin:0}
+p{color:#8292ad;font-size:12px}
+a{text-decoration:none}
+.btn{display:inline-block;padding:11px 15px;border-radius:8px;font-size:12px;font-weight:bold}
+.primary{background:#00d5ff;color:#00121b}
+.secondary{background:#25344b;color:white}
+.searchbox{background:#111c30;padding:18px;border:1px solid #26364e;border-radius:12px;margin-bottom:20px}
+.searchform{display:flex;gap:10px;flex-wrap:wrap}
+input,select{padding:12px;background:#091426;color:white;border:1px solid #2a3c56;border-radius:8px;outline:none}
+.searchform input{flex:1;min-width:170px}
+button{border:0;cursor:pointer}
+.tablebox{background:#111c30;border:1px solid #26364e;border-radius:12px;overflow:hidden}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1000px}
+th{text-align:left;padding:15px;background:#142138;color:#8292ad;font-size:10px;letter-spacing:1px}
+td{padding:14px;border-top:1px solid #26364e;font-size:12px}
+tr:hover td{background:#ffffff05}
+.badge{padding:6px 9px;border-radius:6px;font-size:10px;font-weight:bold;display:inline-block}
+.in{background:#392c17;color:#ffad42}
+.out{background:#103329;color:#16d99b}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.edit{background:#00d5ff;color:#00121b}
+.view{background:#263a59;color:white}
+.delete{background:#48202a;color:#ff8290}
+.deliver{background:#104331;color:#16d99b}
+.action-btn{padding:8px 10px;border-radius:6px;font-size:10px;font-weight:bold}
+.flash{background:#123c32;color:#66edbc;padding:12px;border-radius:8px;margin-bottom:15px}
+.empty{text-align:center;padding:35px;color:#8292ad}
+@media(max-width:600px){body{padding:12px}h1{font-size:21px}}
+</style>
 </head>
 
 <body>
-
 <div class="container">
 
-    <header>
-        <div>
-            <h1>GENERATOR RECORDS</h1>
-            <p class="subtitle">PATEL GENERATOR | Manage all entries</p>
-        </div>
-
-        <a href="/" class="btn back">← Dashboard</a>
-    </header>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="message">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <form action="/records" method="GET" class="search-box">
-
-        <input
-            type="text"
-            name="search"
-            placeholder="Search customer, mobile, model, serial..."
-            value="{{ search }}"
-        >
-
-        <select name="status">
-            <option value="">All Status</option>
-            <option value="IN SHOP"
-                {% if status == "IN SHOP" %}selected{% endif %}>
-                IN SHOP
-            </option>
-            <option value="DELIVERED"
-                {% if status == "DELIVERED" %}selected{% endif %}>
-                DELIVERED
-            </option>
-        </select>
-
-        <button class="btn search-btn" type="submit">SEARCH</button>
-        <a href="/records" class="btn reset">RESET</a>
-
-    </form>
-
-    <div class="table-wrap">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Customer</th>
-                    <th>Generator</th>
-                    <th>KVA</th>
-                    <th>Entry Date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-            {% for r in records %}
-
-                <tr>
-                    <td>#{{ r.id }}</td>
-
-                    <td>
-                        <strong>{{ r.customer }}</strong><br>
-                        <small>{{ r.mobile or "No mobile" }}</small>
-                    </td>
-
-                    <td>
-                        {{ r.company or "-" }}<br>
-                        <small>{{ r.model or "-" }}</small>
-                    </td>
-
-                    <td>{{ r.kva or "-" }}</td>
-
-                    <td>
-                        {% if r.entry_date %}
-                            {{ r.entry_date.strftime("%d-%m-%Y") }}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-
-                    <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
-
-                    <td>
-                        {% if r.status == "DELIVERED" %}
-                            <span class="status delivered">DELIVERED</span>
-                        {% else %}
-                            <span class="status in-shop">IN SHOP</span>
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        <div class="actions">
-
-                            <a href="/details/{{ r.id }}"
-                               class="btn details">
-                                VIEW DETAILS
-                            </a>
-
-                            {% if r.status == "IN SHOP" %}
-
-                                <form action="/deliver/{{ r.id }}"
-                                      method="POST">
-
-                                    <input
-                                        type="text"
-                                        name="delivered_to"
-                                        placeholder="Delivered to"
-                                        required
-                                    >
-
-                                    <button type="submit"
-                                            class="btn deliver">
-                                        MARK DELIVERED
-                                    </button>
-
-                                </form>
-
-                            {% elif r.status == "DELIVERED" %}
-
-                                <form action="/delete/{{ r.id }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Permanently delete this delivered generator record? This cannot be undone.');">
-
-                                    <button type="submit"
-                                            class="btn delete">
-                                        🗑 DELETE
-                                    </button>
-
-                                </form>
-
-                            {% endif %}
-
-                        </div>
-                    </td>
-                </tr>
-
-            {% else %}
-
-                <tr>
-                    <td colspan="8" class="empty">
-                        No generator records found.
-                    </td>
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-        </table>
-
-    </div>
-
+<div class="header">
+<div>
+<h1>ALL GENERATOR RECORDS</h1>
+<p>Manage, edit, deliver and delete generator entries</p>
 </div>
 
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<a class="btn secondary" href="{{ url_for('index') }}">DASHBOARD</a>
+<a class="btn primary" href="{{ url_for('entry') }}">+ NEW ENTRY</a>
+</div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+{% for message in messages %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
+{% endwith %}
+
+<div class="searchbox">
+<form class="searchform" method="GET" action="{{ url_for('records') }}">
+
+<input type="text" name="search"
+placeholder="Search customer, mobile, model, serial, KVA..."
+value="{{ search }}">
+
+<select name="status">
+<option value="">ALL STATUS</option>
+<option value="IN SHOP" {% if status == 'IN SHOP' %}selected{% endif %}>IN SHOP</option>
+<option value="DELIVERED" {% if status == 'DELIVERED' %}selected{% endif %}>DELIVERED</option>
+</select>
+
+<button class="btn primary" type="submit">SEARCH</button>
+
+<a class="btn secondary" href="{{ url_for('records') }}">RESET</a>
+
+</form>
+</div>
+
+<div class="tablebox">
+<div class="scroll">
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>CUSTOMER</th>
+<th>COMPANY / MODEL</th>
+<th>SERIAL</th>
+<th>KVA</th>
+<th>ENTRY DATE</th>
+<th>AMOUNT</th>
+<th>STATUS</th>
+<th>ACTIONS</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for r in records %}
+<tr>
+
+<td>#{{ r.id }}</td>
+
+<td>
+<strong>{{ r.customer }}</strong><br>
+<span style="color:#8292ad">{{ r.mobile or '-' }}</span>
+</td>
+
+<td>
+{{ r.company or '-' }}<br>
+<span style="color:#8292ad">{{ r.model or '-' }}</span>
+</td>
+
+<td>{{ r.serial or '-' }}</td>
+
+<td>{{ r.kva or '-' }}</td>
+
+<td>
+{{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}
+</td>
+
+<td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
+
+<td>
+{% if r.status == 'IN SHOP' %}
+<span class="badge in">IN SHOP</span>
+{% else %}
+<span class="badge out">DELIVERED</span>
+{% endif %}
+</td>
+
+<td>
+<div class="actions">
+
+<a class="action-btn edit"
+href="{{ url_for('edit_entry', id=r.id) }}">
+✏ EDIT
+</a>
+
+<a class="action-btn view"
+href="{{ url_for('details', id=r.id) }}">
+VIEW
+</a>
+
+{% if r.status == 'IN SHOP' %}
+
+<form method="POST"
+action="{{ url_for('deliver', id=r.id) }}"
+onsubmit="return confirm('Mark this generator as delivered?');">
+
+<input type="hidden" name="delivered_to" value="{{ r.customer }}">
+
+<button class="action-btn deliver" type="submit">
+DELIVER
+</button>
+
+</form>
+
+{% else %}
+
+<form method="POST"
+action="{{ url_for('delete_record', id=r.id) }}"
+onsubmit="return confirm('Permanently delete this delivered record?');">
+
+<button class="action-btn delete" type="submit">
+DELETE
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+<td colspan="9" class="empty">
+No generator records found.
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+<p style="text-align:center;margin-top:18px">
+TOTAL RECORDS: {{ records|length }}
+</p>
+
+</div>
 </body>
 </html>
