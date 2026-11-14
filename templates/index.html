@@ -2,504 +2,896 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patel Generator ERP | Dashboard</title>
 
-<title>Patel Generator | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body{
-    background:#07111f;
-    color:#fff;
-    font-family:Arial,sans-serif;
-}
+        :root {
+            --bg: #080d18;
+            --sidebar: #0d1525;
+            --card: #111c30;
+            --border: #1e2c43;
+            --text: #e8f0ff;
+            --muted: #8292ad;
+            --cyan: #00d5ff;
+            --green: #16d99b;
+            --orange: #ffad42;
+            --red: #ff6175;
+        }
 
-.sidebar{
-    width:240px;
-    height:100vh;
-    position:fixed;
-    left:0;
-    top:0;
-    background:#0c192a;
-    border-right:1px solid #24364c;
-    padding:25px 18px;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
 
-.logo{
-    font-size:21px;
-    font-weight:bold;
-    color:#00c8ff;
-    margin-bottom:40px;
-}
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
 
-.logo span{
-    display:block;
-    color:white;
-    font-size:12px;
-    margin-top:6px;
-    letter-spacing:2px;
-}
+        /* SIDEBAR */
 
-.nav a{
-    display:block;
-    color:#a9bfd5;
-    padding:14px;
-    text-decoration:none;
-    border-radius:9px;
-    margin-bottom:9px;
-    transition:.2s;
-}
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 28px 18px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
 
-.nav a:hover{
-    background:#142c43;
-    color:#00c8ff;
-}
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 8px 30px;
+            border-bottom: 1px solid var(--border);
+        }
 
-.logout{
-    position:absolute;
-    bottom:25px;
-    left:18px;
-    right:18px;
-}
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            background: linear-gradient(135deg, #00d5ff, #0878ff);
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 23px;
+            color: #00121e;
+            font-weight: 800;
+        }
 
-.logout a{
-    display:block;
-    background:#351c2a;
-    color:#ff8585;
-    padding:13px;
-    text-align:center;
-    text-decoration:none;
-    border-radius:9px;
-}
+        .brand h2 {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
 
-.main{
-    margin-left:240px;
-    padding:30px;
-}
+        .brand p {
+            font-size: 10px;
+            color: var(--cyan);
+            margin-top: 4px;
+            letter-spacing: 2px;
+        }
 
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:15px;
-    margin-bottom:30px;
-}
+        .nav-title {
+            color: #60718d;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 28px 12px 12px;
+        }
 
-.topbar h1{
-    font-size:27px;
-}
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px 13px;
+            margin: 5px 0;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+            transition: .2s;
+        }
 
-.topbar p{
-    color:#829bb5;
-    margin-top:7px;
-}
+        .nav a:hover,
+        .nav a.active {
+            background: #142941;
+            color: var(--cyan);
+        }
 
-.date{
-    color:#00c8ff;
-    background:#10243a;
-    padding:12px 16px;
-    border-radius:9px;
-}
+        .nav-icon {
+            font-size: 18px;
+            width: 23px;
+            text-align: center;
+        }
 
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-    gap:18px;
-    margin-bottom:35px;
-}
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 22px;
+            right: 22px;
+            border-top: 1px solid var(--border);
+            padding-top: 18px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.8;
+        }
 
-.stat-card{
-    background:#101e30;
-    border:1px solid #263d56;
-    border-radius:14px;
-    padding:23px;
-}
+        /* MAIN */
 
-.stat-card p{
-    color:#91a9c2;
-    font-size:14px;
-    margin-bottom:15px;
-}
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 32px;
+        }
 
-.stat-card h2{
-    font-size:32px;
-}
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 32px;
+        }
 
-.stat-card small{
-    color:#00c8ff;
-}
+        .topbar h1 {
+            font-size: 25px;
+            font-weight: 800;
+        }
 
-.kva-section{
-    margin-bottom:35px;
-}
+        .topbar p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 7px;
+        }
 
-.section-title{
-    font-size:21px;
-    margin-bottom:20px;
-}
+        .status-pill {
+            background: #103329;
+            color: var(--green);
+            padding: 10px 15px;
+            border: 1px solid #1b5a47;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+        }
 
-.kva-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:16px;
-}
+        /* BUTTONS */
 
-.kva-card{
-    display:block;
-    text-decoration:none;
-    color:white;
-    background:#101e30;
-    border:1px solid #263d56;
-    border-radius:14px;
-    padding:20px;
-    transition:.2s;
-}
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 17px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .2s;
+        }
 
-.kva-card:hover{
-    border-color:#00c8ff;
-    transform:translateY(-3px);
-    background:#13263b;
-}
+        .btn-primary {
+            background: var(--cyan);
+            color: #00121b;
+        }
 
-.kva-card h3{
-    color:#00c8ff;
-    font-size:19px;
-    margin-bottom:16px;
-}
+        .btn-primary:hover {
+            background: #74eaff;
+            transform: translateY(-2px);
+        }
 
-.kva-total{
-    font-size:32px;
-    font-weight:bold;
-}
+        /* STATS */
 
-.kva-total span{
-    font-size:13px;
-    color:#829bb5;
-    font-weight:normal;
-}
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 17px;
+            margin-bottom: 35px;
+        }
 
-.kva-info{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:18px;
-    padding-top:15px;
-    border-top:1px solid #263d56;
-}
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+        }
 
-.kva-info div{
-    font-size:13px;
-    color:#9bb0c7;
-}
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            right: -35px;
+            top: -35px;
+            background: var(--glow);
+            opacity: .09;
+        }
 
-.kva-info strong{
-    display:block;
-    color:white;
-    font-size:19px;
-    margin-top:6px;
-}
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.kva-inside strong{
-    color:#35d49a;
-}
+        .stat-icon {
+            font-size: 22px;
+        }
 
-.kva-delivered strong{
-    color:#ffb45d;
-}
+        .stat-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+        }
 
-.table-box{
-    background:#101e30;
-    border:1px solid #263d56;
-    border-radius:14px;
-    padding:20px;
-    overflow:hidden;
-}
+        .stat-number {
+            font-size: 30px;
+            font-weight: 800;
+            margin-top: 17px;
+        }
 
-.table-wrap{
-    overflow-x:auto;
-}
+        .stat-card.total {
+            --glow: var(--cyan);
+        }
 
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:650px;
-}
+        .stat-card.inside {
+            --glow: var(--orange);
+        }
 
-th,td{
-    padding:15px 12px;
-    text-align:left;
-    border-bottom:1px solid #263d56;
-    font-size:14px;
-}
+        .stat-card.delivered {
+            --glow: var(--green);
+        }
 
-th{
-    color:#00c8ff;
-}
+        .stat-card.revenue {
+            --glow: #a78bfa;
+        }
 
-td{
-    color:#d5e2ef;
-}
+        /* SECTION */
 
-.status{
-    color:#35d49a;
-    font-weight:bold;
-}
+        .section {
+            margin-bottom: 35px;
+        }
 
-.view-link{
-    color:#00c8ff;
-    text-decoration:none;
-}
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
 
-.empty{
-    color:#829bb5;
-    padding:20px 0;
-}
+        .section-heading h2 {
+            font-size: 17px;
+            font-weight: 800;
+        }
 
-@media(max-width:750px){
+        .section-heading p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
 
-    .sidebar{
-        width:100%;
-        height:auto;
-        position:relative;
-        padding:17px;
-        border-right:0;
-        border-bottom:1px solid #24364c;
-    }
+        /* KVA CARDS */
 
-    .logo{
-        margin-bottom:15px;
-    }
+        .kva-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
 
-    .nav{
-        display:flex;
-        gap:5px;
-        flex-wrap:wrap;
-    }
+        .kva-card {
+            display: block;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text);
+            transition: .2s;
+        }
 
-    .nav a{
-        padding:10px;
-        font-size:13px;
-        margin:0;
-    }
+        .kva-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px #00d5ff12;
+        }
 
-    .logout{
-        position:static;
-        margin-top:12px;
-    }
+        .kva-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-    .main{
-        margin-left:0;
-        padding:18px;
-    }
+        .kva-title h3 {
+            font-size: 20px;
+            font-weight: 800;
+        }
 
-    .topbar h1{
-        font-size:22px;
-    }
-}
-</style>
+        .kva-arrow {
+            color: var(--cyan);
+            font-size: 19px;
+        }
+
+        .kva-total {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .kva-total small {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .kva-info {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .kva-info span {
+            font-size: 10px;
+            padding: 7px 9px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        .inside-tag {
+            background: #392c17;
+            color: var(--orange);
+        }
+
+        .delivered-tag {
+            background: #103329;
+            color: var(--green);
+        }
+
+        .empty {
+            background: var(--card);
+            border: 1px dashed var(--border);
+            border-radius: 14px;
+            padding: 35px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* TABLE */
+
+        .table-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px;
+            background: #142138;
+            color: #8292ad;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        tr:hover td {
+            background: #ffffff05;
+        }
+
+        .customer-name {
+            font-weight: 700;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .badge-in {
+            background: #392c17;
+            color: var(--orange);
+        }
+
+        .badge-out {
+            background: #103329;
+            color: var(--green);
+        }
+
+        .view-link {
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .view-link:hover {
+            text-decoration: underline;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .kva-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 700px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 15px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .brand {
+                padding-bottom: 14px;
+            }
+
+            .nav-title,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .nav {
+                display: flex;
+                overflow-x: auto;
+                gap: 7px;
+                padding-top: 12px;
+            }
+
+            .nav a {
+                flex-shrink: 0;
+                padding: 10px;
+                margin: 0;
+                font-size: 11px;
+            }
+
+            .nav-icon {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px 14px;
+            }
+
+            .topbar h1 {
+                font-size: 20px;
+            }
+
+            .status-pill {
+                font-size: 9px;
+                padding: 8px;
+            }
+
+            .stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 23px;
+            }
+
+            .kva-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .kva-card {
+                padding: 14px;
+            }
+
+            .kva-title h3 {
+                font-size: 17px;
+            }
+
+            .kva-total {
+                font-size: 23px;
+            }
+
+            .section-heading h2 {
+                font-size: 15px;
+            }
+        }
+
+        @media(max-width: 380px) {
+            .kva-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
+<div class="layout">
 
-<aside class="sidebar">
+    <!-- SIDEBAR -->
 
-    <div class="logo">
-        ⚡ PATEL GENERATOR
-        <span>ERP MANAGEMENT</span>
-    </div>
+    <aside class="sidebar">
 
-    <nav class="nav">
-        <a href="{{ url_for('index') }}">▦ Dashboard</a>
-        <a href="{{ url_for('entry') }}">＋ New Entry</a>
-        <a href="{{ url_for('records') }}">▤ All Records</a>
-        <a href="{{ url_for('customers') }}">♙ Customers</a>
-    </nav>
+        <div class="brand">
 
-    <div class="logout">
-        <a href="{{ url_for('logout') }}">↪ Logout</a>
-    </div>
+            <div class="brand-icon">P</div>
 
-</aside>
+            <div>
+                <h2>PATEL GENERATOR</h2>
+                <p>ERP MANAGEMENT</p>
+            </div>
 
-
-<!-- MAIN DASHBOARD -->
-
-<main class="main">
-
-    <header class="topbar">
-        <div>
-            <h1>Dashboard Overview</h1>
-            <p>Welcome to Patel Generator Management System</p>
         </div>
 
-        <div class="date">
-            ⚡ GENERATOR ERP
-        </div>
-    </header>
+        <div class="nav-title">MAIN MENU</div>
 
+        <nav class="nav">
 
-    <!-- MAIN STATS -->
-
-    <section class="stats">
-
-        <div class="stat-card">
-            <p>TOTAL GENERATORS</p>
-            <h2>{{ total }}</h2>
-            <small>All records</small>
-        </div>
-
-        <div class="stat-card">
-            <p>IN SHOP</p>
-            <h2>{{ inside }}</h2>
-            <small>Currently in shop</small>
-        </div>
-
-        <div class="stat-card">
-            <p>DELIVERED</p>
-            <h2>{{ delivered }}</h2>
-            <small>Successfully delivered</small>
-        </div>
-
-        <div class="stat-card">
-            <p>DELIVERED AMOUNT</p>
-            <h2>₹{{ "%.2f"|format(revenue or 0) }}</h2>
-            <small>Recorded amount</small>
-        </div>
-
-    </section>
-
-
-    <!-- KVA WISE GENERATORS -->
-
-    <section class="kva-section">
-
-        <h2 class="section-title">
-            ⚡ KVA WISE GENERATOR MANAGEMENT
-        </h2>
-
-        <div class="kva-grid">
-
-            {% for item in kva_stats %}
-
-            <a class="kva-card"
-               href="{{ url_for('kva_records', kva=item.kva) }}">
-
-                <h3>{{ item.kva }}</h3>
-
-                <div class="kva-total">
-                    {{ item.total }}
-                    <span>Generators</span>
-                </div>
-
-                <div class="kva-info">
-
-                    <div class="kva-inside">
-                        IN SHOP
-                        <strong>{{ item.inside }}</strong>
-                    </div>
-
-                    <div class="kva-delivered">
-                        DELIVERED
-                        <strong>{{ item.delivered }}</strong>
-                    </div>
-
-                </div>
-
+            <a href="{{ url_for('index') }}" class="active">
+                <span class="nav-icon">▦</span>
+                Dashboard
             </a>
+
+            <a href="{{ url_for('entry') }}">
+                <span class="nav-icon">＋</span>
+                New Entry
+            </a>
+
+            <a href="{{ url_for('records') }}">
+                <span class="nav-icon">▤</span>
+                All Records
+            </a>
+
+            <a href="{{ url_for('customers') }}">
+                <span class="nav-icon">♙</span>
+                Customers
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <strong>PATEL GENERATOR ERP</strong><br>
+            Generator Management System<br>
+            Version 1.0
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome to Patel Generator Management System</p>
+            </div>
+
+            <div class="status-pill">
+                ● SYSTEM ACTIVE
+            </div>
+
+        </header>
+
+
+        <!-- STATISTICS -->
+
+        <section class="stats">
+
+            <div class="stat-card total">
+
+                <div class="stat-top">
+                    <span class="stat-label">TOTAL GENERATORS</span>
+                    <span class="stat-icon">⚡</span>
+                </div>
+
+                <div class="stat-number">
+                    {{ total }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card inside">
+
+                <div class="stat-top">
+                    <span class="stat-label">IN SHOP</span>
+                    <span class="stat-icon">🔧</span>
+                </div>
+
+                <div class="stat-number">
+                    {{ inside }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card delivered">
+
+                <div class="stat-top">
+                    <span class="stat-label">DELIVERED</span>
+                    <span class="stat-icon">✓</span>
+                </div>
+
+                <div class="stat-number">
+                    {{ delivered }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card revenue">
+
+                <div class="stat-top">
+                    <span class="stat-label">DELIVERED AMOUNT</span>
+                    <span class="stat-icon">₹</span>
+                </div>
+
+                <div class="stat-number">
+                    ₹{{ "%.0f"|format(revenue or 0) }}
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- KVA SECTION -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>⚡ KVA WISE GENERATORS</h2>
+                    <p>Click any KVA card to view its generators</p>
+                </div>
+
+                <a href="{{ url_for('entry') }}" class="btn btn-primary">
+                    + ADD GENERATOR
+                </a>
+
+            </div>
+
+
+            {% if kva_stats %}
+
+            <div class="kva-grid">
+
+                {% for item in kva_stats %}
+
+                <a class="kva-card"
+                   href="{{ url_for('kva_records', kva=item.kva) }}">
+
+                    <div class="kva-title">
+
+                        <h3>{{ item.kva }} KVA</h3>
+
+                        <span class="kva-arrow">↗</span>
+
+                    </div>
+
+                    <div class="kva-total">
+                        {{ item.total }}
+                        <small>TOTAL UNITS</small>
+                    </div>
+
+                    <div class="kva-info">
+
+                        <span class="inside-tag">
+                            IN SHOP: {{ item.inside }}
+                        </span>
+
+                        <span class="delivered-tag">
+                            DELIVERED: {{ item.delivered }}
+                        </span>
+
+                    </div>
+
+                </a>
+
+                {% endfor %}
+
+            </div>
 
             {% else %}
 
             <div class="empty">
-                No generator records found.
-                Add your first generator to see KVA statistics.
+                <div style="font-size:30px; margin-bottom:10px;">⚡</div>
+                No generators added yet.<br><br>
+
+                <a href="{{ url_for('entry') }}" class="btn btn-primary">
+                    Add First Generator
+                </a>
             </div>
 
-            {% endfor %}
+            {% endif %}
 
-        </div>
-
-    </section>
+        </section>
 
 
-    <!-- RECENT RECORDS -->
+        <!-- RECENT RECORDS -->
 
-    <section>
+        <section class="section">
 
-        <h2 class="section-title">
-            RECENT GENERATOR ENTRIES
-        </h2>
+            <div class="section-heading">
 
-        <div class="table-box">
+                <div>
+                    <h2>RECENT GENERATOR ENTRIES</h2>
+                    <p>Latest 5 generator records</p>
+                </div>
 
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Customer</th>
-                            <th>Company</th>
-                            <th>Model</th>
-                            <th>KVA</th>
-                            <th>Status</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {% for r in latest %}
-
-                        <tr>
-                            <td>#{{ r.id }}</td>
-                            <td>{{ r.customer }}</td>
-                            <td>{{ r.company or '-' }}</td>
-                            <td>{{ r.model or '-' }}</td>
-                            <td>{{ r.kva or '-' }}</td>
-
-                            <td class="status">
-                                {{ r.status }}
-                            </td>
-
-                            <td>
-                                <a class="view-link"
-                                   href="{{ url_for('details', id=r.id) }}">
-                                    View →
-                                </a>
-                            </td>
-                        </tr>
-
-                        {% else %}
-
-                        <tr>
-                            <td colspan="7">
-                                No recent entries available.
-                            </td>
-                        </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
+                <a href="{{ url_for('records') }}" class="view-link">
+                    VIEW ALL →
+                </a>
 
             </div>
 
-        </div>
 
-    </section>
+            <div class="table-box">
 
-</main>
+                <div class="table-scroll">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Company</th>
+                                <th>Model</th>
+                                <th>KVA</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for r in latest %}
+
+                            <tr>
+
+                                <td>#{{ r.id }}</td>
+
+                                <td>
+                                    <div class="customer-name">
+                                        {{ r.customer }}
+                                    </div>
+
+                                    <div class="muted">
+                                        {{ r.mobile or "No mobile" }}
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {{ r.company or "-" }}
+                                </td>
+
+                                <td>
+                                    {{ r.model or "-" }}
+                                </td>
+
+                                <td>
+                                    {{ r.kva or "-" }}
+                                </td>
+
+                                <td>
+
+                                    {% if r.status == "IN SHOP" %}
+
+                                    <span class="badge badge-in">
+                                        IN SHOP
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="badge badge-out">
+                                        DELIVERED
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+                                    <a class="view-link"
+                                       href="{{ url_for('details', id=r.id) }}">
+                                        VIEW →
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                            {% else %}
+
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:30px; color:#8292ad;">
+                                    No records found.
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer style="text-align:center; color:#60718d; font-size:10px; padding:20px;">
+            © {{ 2026 }} PATEL GENERATOR | ALL RIGHTS RESERVED
+        </footer>
+
+    </main>
+
+</div>
 
 </body>
 </html>
