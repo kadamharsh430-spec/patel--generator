@@ -1,7 +1,6 @@
 
 import os
 from datetime import datetime
-from functools import wraps
 
 from flask import (
     Flask,
@@ -9,8 +8,7 @@ from flask import (
     request,
     redirect,
     url_for,
-    flash,
-    session
+    flash
 )
 
 from flask_sqlalchemy import SQLAlchemy
@@ -18,21 +16,14 @@ from sqlalchemy import func, or_
 
 
 # ==========================================
-# PATEL GENERATOR ERP - APP CONFIGURATION
+# PATEL GENERATOR ERP
 # ==========================================
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ.get(
-    "SECRET_KEY",
-    "change-this-secret-key-before-deployment"
+    "SECRET_KEY", "patel-generator-secret-key"
 )
-
-app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "pg")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "Pg123")
 
 
 # ==========================================
@@ -88,10 +79,7 @@ class Genset(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    customer = db.Column(
-        db.String(120),
-        nullable=False
-    )
+    customer = db.Column(db.String(120), nullable=False)
 
     mobile = db.Column(db.String(20))
 
@@ -109,10 +97,7 @@ class Genset(db.Model):
 
     work = db.Column(db.String(100))
 
-    amount = db.Column(
-        db.Float,
-        default=0
-    )
+    amount = db.Column(db.Float, default=0)
 
     entry_date = db.Column(
         db.DateTime,
@@ -121,9 +106,7 @@ class Genset(db.Model):
 
     exit_date = db.Column(db.DateTime)
 
-    delivered_to = db.Column(
-        db.String(120)
-    )
+    delivered_to = db.Column(db.String(120))
 
     status = db.Column(
         db.String(20),
@@ -132,78 +115,11 @@ class Genset(db.Model):
 
 
 # ==========================================
-# LOGIN REQUIRED DECORATOR
-# ==========================================
-
-def login_required(route):
-
-    @wraps(route)
-    def wrapper(*args, **kwargs):
-
-        if not session.get("logged_in"):
-            return redirect(url_for("login"))
-
-        return route(*args, **kwargs)
-
-    return wrapper
-
-
-# ==========================================
-# LOGIN
-# ==========================================
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-
-    if session.get("logged_in"):
-        return redirect(url_for("index"))
-
-    if request.method == "POST":
-
-        username = request.form.get(
-            "username", ""
-        )
-
-        password = request.form.get(
-            "password", ""
-        )
-
-        if (
-            username == ADMIN_USERNAME
-            and password == ADMIN_PASSWORD
-        ):
-
-            session.clear()
-            session["logged_in"] = True
-
-            return redirect(url_for("index"))
-
-        flash("Wrong username or password!")
-
-    return render_template("login.html")
-
-
-# ==========================================
-# LOGOUT
-# ==========================================
-
-@app.route("/logout")
-def logout():
-
-    session.clear()
-
-    return redirect(url_for("login"))
-
-
-# ==========================================
-# DASHBOARD + KVA WISE COUNTING
+# DASHBOARD
 # ==========================================
 
 @app.route("/")
-@login_required
 def index():
-
-    # Overall counts
 
     total = Genset.query.count()
 
@@ -224,13 +140,11 @@ def index():
         status="DELIVERED"
     ).scalar()
 
-    # Recent entries
-
     latest = Genset.query.order_by(
         Genset.entry_date.desc()
     ).limit(5).all()
 
-    # Find all different KVA values
+    # KVA WISE COUNTING
 
     kva_values = db.session.query(
         Genset.kva
@@ -271,14 +185,18 @@ def index():
 
         })
 
-    # Numeric KVA sorting where possible
+    # SORT KVA VALUES
 
     def kva_sort(item):
 
         try:
-            return (0, float(
-                item["kva"].lower().replace("kva", "").strip()
-            ))
+            number = float(
+                item["kva"].lower().replace(
+                    "kva", ""
+                ).strip()
+            )
+
+            return (0, number)
 
         except (ValueError, AttributeError):
             return (1, item["kva"].lower())
@@ -309,7 +227,6 @@ def index():
 # ==========================================
 
 @app.route("/entry", methods=["GET", "POST"])
-@login_required
 def entry():
 
     if request.method == "POST":
@@ -374,11 +291,10 @@ def entry():
 
 
 # ==========================================
-# ALL RECORDS + SEARCH + FILTER
+# ALL RECORDS + SEARCH
 # ==========================================
 
 @app.route("/records")
-@login_required
 def records():
 
     search = request.args.get(
@@ -453,7 +369,6 @@ def records():
 # ==========================================
 
 @app.route("/kva/<path:kva>")
-@login_required
 def kva_records(kva):
 
     records = Genset.query.filter_by(
@@ -496,7 +411,6 @@ def kva_records(kva):
 # ==========================================
 
 @app.route("/deliver/<int:id>", methods=["POST"])
-@login_required
 def deliver(id):
 
     record = Genset.query.get_or_404(id)
@@ -527,7 +441,6 @@ def deliver(id):
 # ==========================================
 
 @app.route("/delete/<int:id>", methods=["POST"])
-@login_required
 def delete_record(id):
 
     record = Genset.query.get_or_404(id)
@@ -552,7 +465,6 @@ def delete_record(id):
 # ==========================================
 
 @app.route("/details/<int:id>")
-@login_required
 def details(id):
 
     record = Genset.query.get_or_404(id)
@@ -569,11 +481,10 @@ def details(id):
 
 
 # ==========================================
-# CUSTOMER LIST
+# CUSTOMERS
 # ==========================================
 
 @app.route("/customers")
-@login_required
 def customers():
 
     search = request.args.get(
@@ -644,7 +555,6 @@ def customers():
 # ==========================================
 
 @app.route("/customer-history/<int:id>")
-@login_required
 def customer_history(id):
 
     customer_record = Genset.query.get_or_404(id)
@@ -696,11 +606,7 @@ with app.app_context():
 if __name__ == "__main__":
 
     app.run(
-
         host="0.0.0.0",
-
         port=5000,
-
         debug=True
-
     )
