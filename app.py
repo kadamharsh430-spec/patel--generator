@@ -4,32 +4,44 @@ from datetime import datetime
 from types import SimpleNamespace
 
 from flask import (
-    Flask, render_template, request, redirect,
-    url_for, flash
+    Flask, render_template, request,
+    redirect, url_for, flash
 )
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_, func, desc
 
 
-# ---------------- APP CONFIG ----------------
+# ================= APP CONFIG =================
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "patel-generator-secret-key")
+
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "patel-generator-secret-key"
+)
 
 database_url = os.environ.get("DATABASE_URL")
 
 if database_url:
     if database_url.startswith("postgres://"):
         database_url = database_url.replace(
-            "postgres://", "postgresql+psycopg://", 1
+            "postgres://",
+            "postgresql+psycopg://",
+            1
         )
     elif database_url.startswith("postgresql://"):
         database_url = database_url.replace(
-            "postgresql://", "postgresql+psycopg://", 1
+            "postgresql://",
+            "postgresql+psycopg://",
+            1
         )
 else:
-    os.makedirs("instance", exist_ok=True)
-    database_url = "sqlite:///../instance/patel_generator.db"
+    os.makedirs(app.instance_path, exist_ok=True)
+    db_path = os.path.join(
+        app.instance_path,
+        "patel_generator.db"
+    )
+    database_url = "sqlite:///" + db_path.replace("\\", "/")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -37,7 +49,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-# ---------------- DATABASE MODEL ----------------
+# ================= DATABASE MODEL =================
 
 class Genset(db.Model):
     __tablename__ = "genset"
@@ -73,15 +85,18 @@ class Genset(db.Model):
     )
 
 
-# ---------------- HELPER FUNCTIONS ----------------
+# ================= HELPER FUNCTIONS =================
 
-def parse_datetime(value, default=None):
+def parse_datetime(value):
     if not value:
-        return default
+        return None
 
     try:
-        return datetime.strptime(value, "%Y-%m-%dT%H:%M")
-    except ValueError:
+        return datetime.strptime(
+            value,
+            "%Y-%m-%dT%H:%M"
+        )
+    except (ValueError, TypeError):
         return None
 
 
@@ -111,25 +126,33 @@ def get_kva_stats():
 
         if record.status == "IN SHOP":
             grouped[kva_name]["inside"] += 1
+
         elif record.status == "DELIVERED":
             grouped[kva_name]["delivered"] += 1
 
     def sort_key(item):
         try:
-            return (0, float(item["kva"].upper().replace("KVA", "").strip()))
+            number = float(
+                item["kva"].upper().replace("KVA", "").strip()
+            )
+            return (0, number)
         except (ValueError, AttributeError):
             return (1, item["kva"].lower())
 
     return [
         SimpleNamespace(**item)
-        for item in sorted(grouped.values(), key=sort_key)
+        for item in sorted(
+            grouped.values(),
+            key=sort_key
+        )
     ]
 
 
-# ---------------- DASHBOARD ----------------
+# ================= DASHBOARD =================
 
 @app.route("/")
 def index():
+
     total = Genset.query.count()
 
     in_shop = Genset.query.filter_by(
@@ -141,7 +164,10 @@ def index():
     ).count()
 
     delivered_amount = db.session.query(
-        func.coalesce(func.sum(Genset.amount), 0)
+        func.coalesce(
+            func.sum(Genset.amount),
+            0
+        )
     ).filter(
         Genset.status == "DELIVERED"
     ).scalar()
@@ -163,10 +189,11 @@ def index():
     )
 
 
-# ---------------- NEW ENTRY ----------------
+# ================= NEW ENTRY =================
 
 @app.route("/entry", methods=["GET", "POST"])
 def entry():
+
     if request.method == "POST":
 
         customer = request.form.get(
@@ -177,7 +204,9 @@ def entry():
             flash("Customer name is required!")
             return redirect(url_for("entry"))
 
-        amount = parse_amount(request.form.get("amount"))
+        amount = parse_amount(
+            request.form.get("amount")
+        )
 
         if amount is None:
             flash("Please enter a valid amount!")
@@ -205,15 +234,20 @@ def entry():
         db.session.commit()
 
         flash("Generator entry added successfully!")
+
         return redirect(url_for("records"))
 
-    return render_template("entry.html", record=None)
+    return render_template(
+        "entry.html",
+        record=None
+    )
 
 
-# ---------------- EDIT ENTRY ----------------
+# ================= EDIT ENTRY =================
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit_entry(id):
+
     record = Genset.query.get_or_404(id)
 
     if request.method == "POST":
@@ -224,9 +258,13 @@ def edit_entry(id):
 
         if not customer:
             flash("Customer name is required!")
-            return redirect(url_for("edit_entry", id=id))
+            return redirect(
+                url_for("edit_entry", id=id)
+            )
 
-        amount = parse_amount(request.form.get("amount"))
+        amount = parse_amount(
+            request.form.get("amount")
+        )
 
         entry_date = parse_datetime(
             request.form.get("entry_date")
@@ -242,18 +280,24 @@ def edit_entry(id):
         )
 
         if amount is None or entry_date is None:
-            flash("Please enter valid amount and entry date!")
-            return redirect(url_for("edit_entry", id=id))
+            flash("Enter a valid amount and entry date!")
+            return redirect(
+                url_for("edit_entry", id=id)
+            )
 
         if exit_value and exit_date is None:
-            flash("Please enter a valid delivery date!")
-            return redirect(url_for("edit_entry", id=id))
+            flash("Enter a valid delivery date!")
+            return redirect(
+                url_for("edit_entry", id=id)
+            )
 
         new_status = request.form.get("status")
 
         if new_status not in ["IN SHOP", "DELIVERED"]:
             flash("Invalid status!")
-            return redirect(url_for("edit_entry", id=id))
+            return redirect(
+                url_for("edit_entry", id=id)
+            )
 
         record.customer = customer
         record.mobile = request.form.get("mobile", "").strip()
@@ -279,18 +323,28 @@ def edit_entry(id):
 
         db.session.commit()
 
-        flash("Generator details and dates updated!")
+        flash("Generator details updated successfully!")
+
         return redirect(url_for("records"))
 
-    return render_template("entry.html", record=record)
+    return render_template(
+        "entry.html",
+        record=record
+    )
 
 
-# ---------------- ALL RECORDS / SEARCH ----------------
+# ================= ALL RECORDS / SEARCH =================
 
 @app.route("/records")
 def records():
-    search = request.args.get("search", "").strip()
-    status_filter = request.args.get("status", "").strip()
+
+    search = request.args.get(
+        "search", ""
+    ).strip()
+
+    status_filter = request.args.get(
+        "status", ""
+    ).strip()
 
     query = Genset.query
 
@@ -325,42 +379,31 @@ def records():
     )
 
 
-# ---------------- KVA-WISE RECORDS ----------------
+# ================= KVA-WISE RECORDS =================
 
 @app.route("/kva/<path:kva>")
 def kva_records(kva):
+
     all_records = Genset.query.filter_by(
         kva=kva
     ).order_by(
         desc(Genset.entry_date)
     ).all()
 
-    total = len(all_records)
-
-    in_shop = sum(
-        1 for r in all_records
-        if r.status == "IN SHOP"
-    )
-
-    delivered = sum(
-        1 for r in all_records
-        if r.status == "DELIVERED"
-    )
-
+    # Reuse records.html. No separate kva.html required.
     return render_template(
-        "kva.html",
+        "records.html",
         records=all_records,
-        kva=kva,
-        total=total,
-        in_shop=in_shop,
-        delivered=delivered
+        search="",
+        status_filter=""
     )
 
 
-# ---------------- MARK AS DELIVERED ----------------
+# ================= MARK DELIVERED =================
 
 @app.route("/deliver/<int:id>", methods=["POST"])
 def deliver(id):
+
     record = Genset.query.get_or_404(id)
 
     if record.status != "IN SHOP":
@@ -378,13 +421,15 @@ def deliver(id):
     db.session.commit()
 
     flash("Generator marked as delivered!")
+
     return redirect(url_for("records"))
 
 
-# ---------------- DELETE DELIVERED RECORD ----------------
+# ================= DELETE DELIVERED RECORD =================
 
 @app.route("/delete/<int:id>", methods=["POST"])
 def delete_record(id):
+
     record = Genset.query.get_or_404(id)
 
     if record.status != "DELIVERED":
@@ -395,13 +440,15 @@ def delete_record(id):
     db.session.commit()
 
     flash("Delivered generator deleted successfully!")
+
     return redirect(url_for("records"))
 
 
-# ---------------- VIEW DETAILS ----------------
+# ================= VIEW DETAILS =================
 
 @app.route("/details/<int:id>")
 def details(id):
+
     record = Genset.query.get_or_404(id)
 
     return render_template(
@@ -410,10 +457,11 @@ def details(id):
     )
 
 
-# ---------------- CUSTOMERS ----------------
+# ================= CUSTOMERS =================
 
 @app.route("/customers")
 def customers():
+
     customer_list = db.session.query(
         Genset.customer,
         Genset.mobile,
@@ -431,10 +479,11 @@ def customers():
     )
 
 
-# ---------------- CUSTOMER HISTORY ----------------
+# ================= CUSTOMER HISTORY =================
 
 @app.route("/customer-history/<int:id>")
 def customer_history(id):
+
     selected = Genset.query.get_or_404(id)
 
     history = Genset.query.filter_by(
@@ -450,13 +499,13 @@ def customer_history(id):
     )
 
 
-# ---------------- CREATE DATABASE TABLES ----------------
+# ================= DATABASE INIT =================
 
 with app.app_context():
     db.create_all()
 
 
-# ---------------- RUN APP ----------------
+# ================= RUN =================
 
 if __name__ == "__main__":
     app.run(
