@@ -4,58 +4,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patel Generator | All Records</title>
-
+<title>Generator Records | PATEL GENERATOR</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:#e8f0ff;font-family:Arial,sans-serif;padding:22px}
+body{margin:0;background:#081321;color:#eaf2ff;font-family:Arial;padding:22px}
 .container{max-width:1250px;margin:auto}
-.header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}
-h1{font-size:25px;margin:0}
-p{color:#8292ad;font-size:12px}
-a{text-decoration:none}
-.btn{display:inline-block;padding:11px 15px;border-radius:8px;font-size:12px;font-weight:bold}
-.primary{background:#00d5ff;color:#00121b}
-.secondary{background:#25344b;color:white}
-.searchbox{background:#111c30;padding:18px;border:1px solid #26364e;border-radius:12px;margin-bottom:20px}
-.searchform{display:flex;gap:10px;flex-wrap:wrap}
-input,select{padding:12px;background:#091426;color:white;border:1px solid #2a3c56;border-radius:8px;outline:none}
-.searchform input{flex:1;min-width:170px}
-button{border:0;cursor:pointer}
-.tablebox{background:#111c30;border:1px solid #26364e;border-radius:12px;overflow:hidden}
-.scroll{overflow-x:auto}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{color:#42d9ff}
+a,button{background:#123b57;color:white;padding:10px 13px;border:0;border-radius:7px;text-decoration:none;cursor:pointer}
+.search{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+input,select{padding:11px;background:#102237;color:white;border:1px solid #34516e;border-radius:7px}
+.search input{flex:1;min-width:180px}
+.table-wrap{overflow-x:auto;background:#102237;border-radius:12px}
 table{width:100%;border-collapse:collapse;min-width:1000px}
-th{text-align:left;padding:15px;background:#142138;color:#8292ad;font-size:10px;letter-spacing:1px}
-td{padding:14px;border-top:1px solid #26364e;font-size:12px}
-tr:hover td{background:#ffffff05}
-.badge{padding:6px 9px;border-radius:6px;font-size:10px;font-weight:bold;display:inline-block}
-.in{background:#392c17;color:#ffad42}
-.out{background:#103329;color:#16d99b}
-.actions{display:flex;gap:7px;flex-wrap:wrap}
-.edit{background:#00d5ff;color:#00121b}
-.view{background:#263a59;color:white}
-.delete{background:#48202a;color:#ff8290}
-.deliver{background:#104331;color:#16d99b}
-.action-btn{padding:8px 10px;border-radius:6px;font-size:10px;font-weight:bold}
-.flash{background:#123c32;color:#66edbc;padding:12px;border-radius:8px;margin-bottom:15px}
-.empty{text-align:center;padding:35px;color:#8292ad}
-@media(max-width:600px){body{padding:12px}h1{font-size:21px}}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #29425a;font-size:13px}
+th{color:#42d9ff;background:#132b43}
+.badge{padding:6px 9px;border-radius:20px;font-size:11px}
+.inside{background:#674b20}
+.done{background:#145b42}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.edit{background:#14527c}
+.deliver{background:#087d68}
+.delete{background:#8c3434}
+.view{background:#475b73}
+.flash{padding:12px;background:#663b25;border-radius:8px;margin:15px 0}
+form.inline{display:inline}
+@media(max-width:600px){body{padding:12px}}
 </style>
 </head>
-
 <body>
 <div class="container">
 
 <div class="header">
-<div>
-<h1>ALL GENERATOR RECORDS</h1>
-<p>Manage, edit, deliver and delete generator entries</p>
-</div>
-
-<div style="display:flex;gap:8px;flex-wrap:wrap">
-<a class="btn secondary" href="{{ url_for('index') }}">DASHBOARD</a>
-<a class="btn primary" href="{{ url_for('entry') }}">+ NEW ENTRY</a>
-</div>
+<h1>GENERATOR RECORDS</h1>
+<a href="{{ url_for('index') }}">Dashboard</a>
+<a href="{{ url_for('entry') }}">+ New Entry</a>
 </div>
 
 {% with messages = get_flashed_messages() %}
@@ -64,29 +47,18 @@ tr:hover td{background:#ffffff05}
 {% endfor %}
 {% endwith %}
 
-<div class="searchbox">
-<form class="searchform" method="GET" action="{{ url_for('records') }}">
-
-<input type="text" name="search"
-placeholder="Search customer, mobile, model, serial, KVA..."
-value="{{ search }}">
-
+<form class="search" method="GET">
+<input name="search" placeholder="Search customer, serial, model, KVA..." value="{{ search }}">
 <select name="status">
-<option value="">ALL STATUS</option>
-<option value="IN SHOP" {% if status == 'IN SHOP' %}selected{% endif %}>IN SHOP</option>
-<option value="DELIVERED" {% if status == 'DELIVERED' %}selected{% endif %}>DELIVERED</option>
+<option value="">All Status</option>
+<option value="IN SHOP" {% if status_filter == 'IN SHOP' %}selected{% endif %}>IN SHOP</option>
+<option value="DELIVERED" {% if status_filter == 'DELIVERED' %}selected{% endif %}>DELIVERED</option>
 </select>
-
-<button class="btn primary" type="submit">SEARCH</button>
-
-<a class="btn secondary" href="{{ url_for('records') }}">RESET</a>
-
+<button type="submit">Search</button>
+<a href="{{ url_for('records') }}">Reset</a>
 </form>
-</div>
 
-<div class="tablebox">
-<div class="scroll">
-
+<div class="table-wrap">
 <table>
 <thead>
 <tr>
@@ -101,108 +73,45 @@ value="{{ search }}">
 <th>ACTIONS</th>
 </tr>
 </thead>
-
 <tbody>
-
 {% for r in records %}
 <tr>
-
 <td>#{{ r.id }}</td>
-
-<td>
-<strong>{{ r.customer }}</strong><br>
-<span style="color:#8292ad">{{ r.mobile or '-' }}</span>
-</td>
-
-<td>
-{{ r.company or '-' }}<br>
-<span style="color:#8292ad">{{ r.model or '-' }}</span>
-</td>
-
+<td>{{ r.customer }}<br>{{ r.mobile or '' }}</td>
+<td>{{ r.company or '-' }}<br>{{ r.model or '-' }}</td>
 <td>{{ r.serial or '-' }}</td>
-
 <td>{{ r.kva or '-' }}</td>
-
-<td>
-{{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}
-</td>
-
+<td>{{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}</td>
 <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
-
 <td>
-{% if r.status == 'IN SHOP' %}
-<span class="badge in">IN SHOP</span>
-{% else %}
-<span class="badge out">DELIVERED</span>
-{% endif %}
+<span class="badge {{ 'inside' if r.status == 'IN SHOP' else 'done' }}">
+{{ r.status }}
+</span>
 </td>
-
 <td>
 <div class="actions">
-
-<a class="action-btn edit"
-href="{{ url_for('edit_entry', id=r.id) }}">
-✏ EDIT
-</a>
-
-<a class="action-btn view"
-href="{{ url_for('details', id=r.id) }}">
-VIEW
-</a>
+<a class="edit" href="{{ url_for('edit_entry', id=r.id) }}">Edit</a>
+<a class="view" href="{{ url_for('details', id=r.id) }}">View</a>
 
 {% if r.status == 'IN SHOP' %}
-
-<form method="POST"
-action="{{ url_for('deliver', id=r.id) }}"
-onsubmit="return confirm('Mark this generator as delivered?');">
-
-<input type="hidden" name="delivered_to" value="{{ r.customer }}">
-
-<button class="action-btn deliver" type="submit">
-DELIVER
-</button>
-
+<form class="inline" method="POST" action="{{ url_for('deliver', id=r.id) }}">
+<button class="deliver" type="submit">Deliver</button>
 </form>
-
 {% else %}
-
-<form method="POST"
-action="{{ url_for('delete_record', id=r.id) }}"
-onsubmit="return confirm('Permanently delete this delivered record?');">
-
-<button class="action-btn delete" type="submit">
-DELETE
-</button>
-
+<form class="inline" method="POST" action="{{ url_for('delete_record', id=r.id) }}"
+onsubmit="return confirm('Delete this generator record?')">
+<button class="delete" type="submit">Delete</button>
 </form>
-
 {% endif %}
-
 </div>
 </td>
-
 </tr>
-
 {% else %}
-
-<tr>
-<td colspan="9" class="empty">
-No generator records found.
-</td>
-</tr>
-
+<tr><td colspan="9">No generator records found.</td></tr>
 {% endfor %}
-
 </tbody>
 </table>
-
 </div>
-</div>
-
-<p style="text-align:center;margin-top:18px">
-TOTAL RECORDS: {{ records|length }}
-</p>
-
 </div>
 </body>
 </html>
