@@ -4,39 +4,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patel Generator | Entry</title>
-
+<title>Generator Entry | PATEL GENERATOR</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:#e8f0ff;font-family:Arial,sans-serif;padding:25px}
-.container{max-width:900px;margin:auto;background:#111c30;border:1px solid #26364e;border-radius:16px;padding:25px}
-h1{font-size:23px}
-p{color:#8292ad;font-size:13px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:25px}
-.field label{display:block;font-size:12px;color:#9aabc5;margin-bottom:8px}
-input,textarea,select{width:100%;padding:13px;border:1px solid #2a3c56;border-radius:8px;background:#091426;color:white;outline:none}
-input:focus,textarea:focus,select:focus{border-color:#00d5ff}
-textarea{resize:vertical;min-height:80px}
+body{margin:0;background:#081321;color:#eaf2ff;font-family:Arial,sans-serif;padding:25px}
+.container{max-width:850px;margin:auto}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:25px}
+h1{margin:0;color:#42d9ff;font-size:25px}
+a,.btn{background:#12304a;color:white;text-decoration:none;padding:11px 16px;border:0;border-radius:8px;cursor:pointer}
+.panel{background:#102237;border:1px solid #25425e;padding:25px;border-radius:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}
+label{font-size:13px;color:#a9c2dc}
+input,select,textarea{width:100%;padding:12px;border:1px solid #34516e;background:#091827;color:white;border-radius:8px;font-size:15px}
+textarea{min-height:85px;resize:vertical}
 .full{grid-column:1/-1}
-.buttons{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
-button,.back{border:0;padding:13px 20px;border-radius:8px;font-weight:bold;cursor:pointer;text-decoration:none;font-size:13px}
-button{background:#00d5ff;color:#00121b}
-.back{background:#25344b;color:white}
-@media(max-width:600px){.grid{grid-template-columns:1fr}.full{grid-column:auto}body{padding:12px}.container{padding:18px}}
+.serial-box{background:#0a1a2b;padding:15px;border-radius:10px;border:1px solid #28445e;margin-top:15px}
+.serial-item{margin-top:12px}
+.serial-item label{display:block;margin-bottom:6px}
+.submit{background:#00a9cf;color:#001521;font-weight:bold;padding:14px;width:100%;margin-top:22px;font-size:16px}
+.flash{background:#663b25;padding:12px;border-radius:8px;margin-bottom:15px}
+@media(max-width:600px){body{padding:14px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.panel{padding:16px}}
 </style>
 </head>
-
 <body>
 <div class="container">
 
-<h1>
-{% if record %}EDIT GENERATOR ENTRY{% else %}NEW GENERATOR ENTRY{% endif %}
-</h1>
+<div class="header">
+<h1>PATEL GENERATOR</h1>
+<a href="{{ url_for('records') }}">← Records</a>
+</div>
 
-<p>Patel Generator Management System</p>
+<div class="panel">
+<h2>{{ 'Edit Generator #' ~ record.id if record else 'New Generator Entry' }}</h2>
+
+{% with messages = get_flashed_messages() %}
+{% for message in messages %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
+{% endwith %}
 
 <form method="POST"
-action="{% if record %}{{ url_for('edit_entry', id=record.id) }}{% else %}{{ url_for('entry') }}{% endif %}">
+action="{{ url_for('edit_entry', id=record.id) if record else url_for('entry') }}">
 
 <div class="grid">
 
@@ -66,38 +75,46 @@ action="{% if record %}{{ url_for('edit_entry', id=record.id) }}{% else %}{{ url
 </div>
 
 <div class="field">
-<label>Serial Number</label>
-<input name="serial" value="{{ record.serial if record else '' }}">
-</div>
-
-<div class="field">
 <label>KVA</label>
-<input name="kva" value="{{ record.kva if record else '' }}" placeholder="Example: 25 KVA">
+<input name="kva" placeholder="Example: 750" value="{{ record.kva if record else '' }}">
 </div>
 
 <div class="field">
 <label>Work Type</label>
-{% set selected_work = record.work if record else '' %}
 <select name="work">
-<option value="">Select Work</option>
-{% for work in ['Repair','Service','Oil Change','Maintenance','Installation','Other'] %}
-<option value="{{ work }}" {% if selected_work == work %}selected{% endif %}>{{ work }}</option>
+{% for item in ['Repair','Service','Oil Change','Maintenance','Other'] %}
+<option value="{{ item }}" {% if record and record.work == item %}selected{% endif %}>{{ item }}</option>
 {% endfor %}
 </select>
 </div>
 
 <div class="field">
-<label>Amount (₹)</label>
+<label>Amount</label>
 <input type="number" step="0.01" min="0" name="amount" value="{{ record.amount if record else '0' }}">
 </div>
 
+{% if not record %}
+<div class="field">
+<label>Quantity (Number of Generators) *</label>
+<input type="number" id="quantity" name="quantity" min="1" max="1000" value="1" required>
+</div>
+{% endif %}
+
 <div class="field full">
-<label>Problem / Complaint</label>
+<label>Serial Number {% if not record %}(optional per generator){% endif %}</label>
+{% if record %}
+<input name="serial" value="{{ record.serial or '' }}">
+{% else %}
+<div id="serialFields"></div>
+</div>
+{% endif %}
+
+<div class="field full">
+<label>Complaint / Problem</label>
 <textarea name="complaint">{{ record.complaint if record else '' }}</textarea>
 </div>
 
 {% if record %}
-
 <div class="field">
 <label>Entry Date & Time</label>
 <input type="datetime-local" name="entry_date"
@@ -111,7 +128,7 @@ value="{{ record.exit_date.strftime('%Y-%m-%dT%H:%M') if record.exit_date else '
 </div>
 
 <div class="field">
-<label>Generator Status</label>
+<label>Status</label>
 <select name="status">
 <option value="IN SHOP" {% if record.status == 'IN SHOP' %}selected{% endif %}>IN SHOP</option>
 <option value="DELIVERED" {% if record.status == 'DELIVERED' %}selected{% endif %}>DELIVERED</option>
@@ -122,21 +139,46 @@ value="{{ record.exit_date.strftime('%Y-%m-%dT%H:%M') if record.exit_date else '
 <label>Delivered To</label>
 <input name="delivered_to" value="{{ record.delivered_to or '' }}">
 </div>
-
 {% endif %}
 
 </div>
 
-<div class="buttons">
-
-<button type="submit">
-{% if record %}UPDATE GENERATOR{% else %}SAVE ENTRY{% endif %}
+<button class="btn submit" type="submit">
+{{ 'UPDATE GENERATOR' if record else 'ADD GENERATORS' }}
 </button>
-
-<a class="back" href="{{ url_for('records') }}">BACK TO RECORDS</a>
-
-</div>
 </form>
 </div>
+</div>
+
+{% if not record %}
+<script>
+const quantityInput = document.getElementById("quantity");
+const serialFields = document.getElementById("serialFields");
+
+function makeSerialFields() {
+    let quantity = Math.min(1000, Math.max(1, parseInt(quantityInput.value) || 1));
+    serialFields.innerHTML = "";
+
+    for (let i = 1; i <= quantity; i++) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "serial-item";
+
+        const label = document.createElement("label");
+        label.textContent = "Generator " + i + " Serial Number";
+
+        const input = document.createElement("input");
+        input.name = "serials[]";
+        input.placeholder = "Enter serial number for generator " + i;
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+        serialFields.appendChild(wrapper);
+    }
+}
+
+quantityInput.addEventListener("input", makeSerialFields);
+makeSerialFields();
+</script>
+{% endif %}
 </body>
 </html>
