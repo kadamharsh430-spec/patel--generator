@@ -3,221 +3,52 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Generator Records | PATEL GENERATOR</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 25px;
-    background: #08111f;
-    color: #eaf2ff;
-    font-family: Arial, sans-serif;
-}
-
-.container {
-    max-width: 1500px;
-    margin: auto;
-}
-
-h1 {
-    color: #38bdf8;
-    margin-bottom: 8px;
-}
-
-.subtitle {
-    color: #94a3b8;
-    margin-bottom: 25px;
-}
-
-.top-counts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.count-card {
-    background: #111e30;
-    border: 1px solid #263b55;
-    border-radius: 14px;
-    padding: 20px;
-}
-
-.count-card h3 {
-    color: #94a3b8;
-    margin: 0 0 12px;
-    font-size: 14px;
-}
-
-.count-card strong {
-    font-size: 30px;
-}
-
-.section {
-    background: #111e30;
-    border: 1px solid #263b55;
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 30px;
-}
-
-.section-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.section-heading h2 {
-    margin: 0;
-}
-
-.green {
-    color: #4ade80;
-}
-
-.red {
-    color: #fb7185;
-}
-
-.count-label {
-    background: #24364c;
-    padding: 8px 13px;
-    border-radius: 20px;
-    font-weight: bold;
-}
-
-.search-form {
-    display: flex;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.search-form input {
-    flex: 1;
-    min-width: 0;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #334b66;
-    background: #081525;
-    color: white;
-    outline: none;
-}
-
-button, .btn {
-    border: none;
-    padding: 9px 13px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 13px;
-}
-
-.search-btn {
-    background: #0284c7;
-    color: white;
-}
-
-.edit-btn {
-    background: #2563eb;
-    color: white;
-}
-
-.view-btn {
-    background: #475569;
-    color: white;
-}
-
-.deliver-btn {
-    background: #16a34a;
-    color: white;
-}
-
-.delete-btn {
-    background: #dc2626;
-    color: white;
-}
-
-.table-wrap {
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1050px;
-}
-
-th, td {
-    padding: 13px 11px;
-    border-bottom: 1px solid #263b55;
-    text-align: left;
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-th {
-    color: #7dd3fc;
-    background: #17283d;
-}
-
-tr:hover td {
-    background: #17283d;
-}
-
-.actions {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.actions form {
-    margin: 0;
-}
-
-.empty {
-    text-align: center;
-    color: #94a3b8;
-    padding: 25px;
-}
-
-.flash {
-    background: #163b32;
-    color: #86efac;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.back {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #7dd3fc;
-    text-decoration: none;
-}
-
-@media(max-width: 650px) {
-    body {
-        padding: 12px;
-    }
-
-    .top-counts {
-        grid-template-columns: 1fr;
-    }
-
-    .section {
-        padding: 13px;
-    }
-}
+*{box-sizing:border-box}
+body{margin:0;padding:25px;background:#08111f;color:#eaf2ff;font-family:Arial,sans-serif}
+.container{max-width:1600px;margin:auto}
+h1{color:#38bdf8;margin-bottom:8px}
+.subtitle{color:#94a3b8;margin-bottom:25px}
+.top-counts{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:30px}
+.count-card,.section{background:#111e30;border:1px solid #263b55;border-radius:14px;padding:20px}
+.count-card h3{color:#94a3b8;margin:0 0 12px;font-size:14px}
+.count-card strong{font-size:30px}
+.section{margin-bottom:30px}
+.section-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.section-heading h2{margin:0}
+.green{color:#4ade80}
+.red{color:#fb7185}
+.orange{color:#fbbf24}
+.blue{color:#38bdf8}
+.count-label{background:#24364c;padding:8px 13px;border-radius:20px;font-weight:bold}
+.search-form{display:flex;gap:10px;margin:20px 0}
+.search-form input{flex:1;min-width:0;padding:12px;border-radius:8px;border:1px solid #334b66;background:#081525;color:white}
+button,.btn{border:none;padding:9px 13px;border-radius:7px;cursor:pointer;font-weight:bold;text-decoration:none;display:inline-block;font-size:13px}
+.search-btn{background:#0284c7;color:white}
+.edit-btn{background:#2563eb;color:white}
+.view-btn{background:#475569;color:white}
+.deliver-btn{background:#16a34a;color:white}
+.delete-btn{background:#dc2626;color:white}
+.rent-btn{background:#d97706;color:white}
+.return-btn{background:#0d9488;color:white}
+.payment-btn{background:#7c3aed;color:white}
+.history-btn{background:#475569;color:white}
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1100px}
+th,td{padding:13px 11px;border-bottom:1px solid #263b55;text-align:left;font-size:13px;white-space:nowrap}
+th{color:#7dd3fc;background:#17283d}
+tr:hover td{background:#17283d}
+.actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.actions form{margin:0}
+.empty{text-align:center;color:#94a3b8;padding:25px}
+.flash{background:#163b32;color:#86efac;padding:12px;border-radius:8px;margin-bottom:15px}
+.back{display:inline-block;margin-bottom:20px;color:#7dd3fc;text-decoration:none}
+.status{font-weight:bold}
+@media(max-width:800px){.top-counts{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){body{padding:12px}.top-counts{grid-template-columns:1fr}.section{padding:13px}}
 </style>
 </head>
 
@@ -227,114 +58,86 @@ tr:hover td {
 <a href="{{ url_for('index') }}" class="back">← Back to Dashboard</a>
 
 <h1>PATEL GENERATOR</h1>
-<p class="subtitle">Generator Entry & Delivery Management</p>
+<p class="subtitle">Generator Entry, Rental & Delivery Management</p>
 
 {% with messages = get_flashed_messages() %}
-    {% for message in messages %}
-        <div class="flash">{{ message }}</div>
-    {% endfor %}
+{% for message in messages %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
 {% endwith %}
 
-<!-- Overall counts -->
+<!-- COUNTS -->
 <div class="top-counts">
-
     <div class="count-card">
         <h3>TOTAL GENERATORS</h3>
         <strong>{{ total_count }}</strong>
     </div>
-
     <div class="count-card">
         <h3>IN SHOP</h3>
         <strong class="green">{{ in_count }}</strong>
     </div>
-
+    <div class="count-card">
+        <h3>ON RENT</h3>
+        <strong class="orange">{{ on_rent_count }}</strong>
+    </div>
     <div class="count-card">
         <h3>DELIVERED</h3>
         <strong class="red">{{ del_count }}</strong>
     </div>
-
 </div>
 
 
-<!-- IN SHOP SECTION -->
+<!-- IN SHOP -->
 <div class="section">
-
     <div class="section-heading">
         <h2 class="green">IN SHOP GENERATORS</h2>
-        <span class="count-label">
-            {{ in_count }} Generators
-        </span>
+        <span class="count-label">{{ in_count }} Generators</span>
     </div>
 
     <form method="GET" action="{{ url_for('records') }}" class="search-form">
-        <input
-            type="text"
-            name="in_search"
-            placeholder="Search in-shop generators..."
-            value="{{ in_search }}"
-        >
+        <input type="text" name="in_search"
+               placeholder="Search IN SHOP generators..."
+               value="{{ in_search }}">
+        <input type="hidden" name="del_search" value="{{ del_search }}">
+        <input type="hidden" name="rent_search" value="{{ rent_search }}">
         <button type="submit" class="search-btn">Search</button>
     </form>
 
     <div class="table-wrap">
     <table>
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Customer</th>
-                <th>Company</th>
-                <th>Model</th>
-                <th>Serial Number</th>
-                <th>KVA</th>
-                <th>Entry Date</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>ID</th><th>Customer</th><th>Company</th>
+            <th>Model</th><th>Serial</th><th>KVA</th>
+            <th>Entry Date</th><th>Amount</th><th>Actions</th>
+        </tr>
         </thead>
-
         <tbody>
         {% for r in in_records %}
-            <tr>
-                <td>#{{ r.id }}</td>
-                <td>{{ r.customer }}</td>
-                <td>{{ r.company or '-' }}</td>
-                <td>{{ r.model or '-' }}</td>
-                <td>{{ r.serial or '-' }}</td>
-                <td>{{ r.kva or '-' }}</td>
-                <td>
-                    {{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}
-                </td>
-                <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
-                <td class="green">{{ r.status }}</td>
+        <tr>
+            <td>#{{ r.id }}</td>
+            <td>{{ r.customer }}</td>
+            <td>{{ r.company or '-' }}</td>
+            <td>{{ r.model or '-' }}</td>
+            <td>{{ r.serial or '-' }}</td>
+            <td>{{ r.kva or '-' }}</td>
+            <td>{{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}</td>
+            <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
+            <td>
+                <div class="actions">
+                    <a href="{{ url_for('edit', id=r.id) }}" class="btn edit-btn">Edit</a>
+                    <a href="{{ url_for('details', id=r.id) }}" class="btn view-btn">View</a>
+                    <a href="{{ url_for('rent_generator', genset_id=r.id) }}" class="btn rent-btn">Rent</a>
 
-                <td>
-                    <div class="actions">
-
-                        <a href="{{ url_for('edit', id=r.id) }}"
-                           class="btn edit-btn">Edit</a>
-
-                        <a href="{{ url_for('details', id=r.id) }}"
-                           class="btn view-btn">View</a>
-
-                        <form method="POST"
-                              action="{{ url_for('deliver', id=r.id) }}"
-                              onsubmit="return confirm('Mark this generator as delivered?');">
-                            <button type="submit" class="deliver-btn">
-                                Deliver
-                            </button>
-                        </form>
-
-                    </div>
-                </td>
-            </tr>
-
+                    <form method="POST" action="{{ url_for('deliver', id=r.id) }}"
+                          onsubmit="return confirm('Mark this generator as delivered?');">
+                        <button type="submit" class="deliver-btn">Deliver</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="10" class="empty">
-                    No IN SHOP generators found.
-                </td>
-            </tr>
+        <tr><td colspan="9" class="empty">No IN SHOP generators found.</td></tr>
         {% endfor %}
         </tbody>
     </table>
@@ -342,89 +145,135 @@ tr:hover td {
 </div>
 
 
-<!-- DELIVERED SECTION -->
+<!-- ON RENT -->
 <div class="section">
-
     <div class="section-heading">
-        <h2 class="red">DELIVERED GENERATORS</h2>
-        <span class="count-label">
-            {{ del_count }} Generators
-        </span>
+        <h2 class="orange">ON RENT GENERATORS</h2>
+        <span class="count-label">{{ on_rent_count }} Generators</span>
     </div>
 
     <form method="GET" action="{{ url_for('records') }}" class="search-form">
-        <input
-            type="text"
-            name="del_search"
-            placeholder="Search delivered generators..."
-            value="{{ del_search }}"
-        >
+        <input type="text" name="rent_search"
+               placeholder="Search rented generators..."
+               value="{{ rent_search }}">
+        <input type="hidden" name="in_search" value="{{ in_search }}">
+        <input type="hidden" name="del_search" value="{{ del_search }}">
         <button type="submit" class="search-btn">Search</button>
     </form>
 
     <div class="table-wrap">
     <table>
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Customer</th>
-                <th>Company</th>
-                <th>Model</th>
-                <th>Serial Number</th>
-                <th>KVA</th>
-                <th>Entry Date</th>
-                <th>Delivery Date</th>
-                <th>Delivered To</th>
-                <th>Amount</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Generator ID</th><th>Customer</th><th>Model</th>
+            <th>KVA</th><th>Renter</th><th>Mobile</th>
+            <th>Rate Type</th><th>Rate</th><th>Start Date</th>
+            <th>Expected Return</th><th>Advance</th><th>Paid</th>
+            <th>Balance</th><th>Actions</th>
+        </tr>
         </thead>
+        <tbody>
+        {% for r in rent_records %}
+        {% set rental = active_rentals.get(r.id) %}
+        <tr>
+            <td>#{{ r.id }}</td>
+            <td>{{ r.customer }}</td>
+            <td>{{ r.model or '-' }}</td>
+            <td>{{ r.kva or '-' }}</td>
 
+            {% if rental %}
+            <td>{{ rental.renter_name }}</td>
+            <td>{{ rental.renter_mobile or '-' }}</td>
+            <td>{{ rental.rate_type }}</td>
+            <td>₹{{ "%.2f"|format(rental.rate or 0) }}</td>
+            <td>{{ rental.start_date.strftime('%d-%m-%Y') if rental.start_date else '-' }}</td>
+            <td>{{ rental.expected_return_date.strftime('%d-%m-%Y') if rental.expected_return_date else 'Not set' }}</td>
+            <td>₹{{ "%.2f"|format(rental.advance or 0) }}</td>
+            <td>₹{{ "%.2f"|format(rental.paid_amount or 0) }}</td>
+            <td>₹{{ "%.2f"|format(rental.balance or 0) }}</td>
+            {% else %}
+            <td colspan="9">Rental details not found</td>
+            {% endif %}
+
+            <td>
+                <div class="actions">
+                    <a href="{{ url_for('details', id=r.id) }}" class="btn view-btn">View</a>
+                    <a href="{{ url_for('edit', id=r.id) }}" class="btn edit-btn">Edit Generator</a>
+
+                    {% if rental %}
+                    <a href="{{ url_for('edit_rental', rental_id=rental.id) }}" class="btn rent-btn">Edit Rental</a>
+                    <a href="{{ url_for('rental_history', genset_id=r.id) }}" class="btn history-btn">History</a>
+                    <a href="{{ url_for('rentals') }}" class="btn payment-btn">Payments</a>
+
+                    <form method="POST" action="{{ url_for('return_rental', rental_id=rental.id) }}"
+                          onsubmit="return confirm('Confirm generator return?');">
+                        <button type="submit" class="return-btn">Return</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="14" class="empty">No ON RENT generators found.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+
+
+<!-- DELIVERED -->
+<div class="section">
+    <div class="section-heading">
+        <h2 class="red">DELIVERED GENERATORS</h2>
+        <span class="count-label">{{ del_count }} Generators</span>
+    </div>
+
+    <form method="GET" action="{{ url_for('records') }}" class="search-form">
+        <input type="text" name="del_search"
+               placeholder="Search delivered generators..."
+               value="{{ del_search }}">
+        <input type="hidden" name="in_search" value="{{ in_search }}">
+        <input type="hidden" name="rent_search" value="{{ rent_search }}">
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th><th>Customer</th><th>Company</th>
+            <th>Model</th><th>Serial</th><th>KVA</th>
+            <th>Entry Date</th><th>Delivery Date</th>
+            <th>Delivered To</th><th>Amount</th><th>Actions</th>
+        </tr>
+        </thead>
         <tbody>
         {% for r in del_records %}
-            <tr>
-                <td>#{{ r.id }}</td>
-                <td>{{ r.customer }}</td>
-                <td>{{ r.company or '-' }}</td>
-                <td>{{ r.model or '-' }}</td>
-                <td>{{ r.serial or '-' }}</td>
-                <td>{{ r.kva or '-' }}</td>
-                <td>
-                    {{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}
-                </td>
-                <td>
-                    {{ r.exit_date.strftime('%d-%m-%Y') if r.exit_date else '-' }}
-                </td>
-                <td>{{ r.delivered_to or '-' }}</td>
-                <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
-
-                <td>
-                    <div class="actions">
-
-                        <a href="{{ url_for('edit', id=r.id) }}"
-                           class="btn edit-btn">Edit</a>
-
-                        <a href="{{ url_for('details', id=r.id) }}"
-                           class="btn view-btn">View</a>
-
-                        <form method="POST"
-                              action="{{ url_for('delete', id=r.id) }}"
-                              onsubmit="return confirm('Delete this delivered generator permanently?');">
-                            <button type="submit" class="delete-btn">
-                                Delete
-                            </button>
-                        </form>
-
-                    </div>
-                </td>
-            </tr>
-
+        <tr>
+            <td>#{{ r.id }}</td>
+            <td>{{ r.customer }}</td>
+            <td>{{ r.company or '-' }}</td>
+            <td>{{ r.model or '-' }}</td>
+            <td>{{ r.serial or '-' }}</td>
+            <td>{{ r.kva or '-' }}</td>
+            <td>{{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}</td>
+            <td>{{ r.exit_date.strftime('%d-%m-%Y') if r.exit_date else '-' }}</td>
+            <td>{{ r.delivered_to or '-' }}</td>
+            <td>₹{{ "%.2f"|format(r.amount or 0) }}</td>
+            <td>
+                <div class="actions">
+                    <a href="{{ url_for('edit', id=r.id) }}" class="btn edit-btn">Edit</a>
+                    <a href="{{ url_for('details', id=r.id) }}" class="btn view-btn">View</a>
+                    <form method="POST" action="{{ url_for('delete', id=r.id) }}"
+                          onsubmit="return confirm('Delete this delivered generator?');">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="11" class="empty">
-                    No DELIVERED generators found.
-                </td>
-            </tr>
+        <tr><td colspan="11" class="empty">No DELIVERED generators found.</td></tr>
         {% endfor %}
         </tbody>
     </table>
@@ -434,4 +283,3 @@ tr:hover td {
 </div>
 </body>
 </html>
-
