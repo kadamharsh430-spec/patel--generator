@@ -5,58 +5,278 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Genset Details | Patel Generator</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:25px;background:#07111f;color:#eaf6ff;font-family:Arial}
-.container{max-width:850px;margin:auto}
-.card{background:#102238;border:1px solid #1d3a54;padding:25px;border-radius:15px;margin-top:20px}
+
+body{
+    margin:0;
+    padding:20px;
+    background:#07111f;
+    color:#eaf6ff;
+    font-family:Arial,sans-serif
+}
+
+.container{max-width:900px;margin:auto}
+
+.card{
+    background:#102238;
+    border:1px solid #1d3a54;
+    padding:25px;
+    border-radius:15px;
+    margin-top:20px
+}
+
 h1{color:#00d9ff}
-h3{color:#00d9ff;border-bottom:1px solid #29445d;padding-bottom:10px}
-p{color:#c5d7e7}
+
+h3{
+    color:#00d9ff;
+    border-bottom:1px solid #29445d;
+    padding-bottom:10px;
+    margin-top:28px
+}
+
+p{color:#c5d7e7;line-height:1.5}
+
 span{color:#8ca6bd}
-a{color:#00d9ff;text-decoration:none}
-button{background:#00d9ff;color:#04121e;padding:12px 18px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
-input{background:#071827;color:white;border:1px solid #31516c;padding:12px;border-radius:7px}
+
+a{
+    color:#00d9ff;
+    text-decoration:none
+}
+
+button,.btn{
+    display:inline-block;
+    background:#00d9ff;
+    color:#04121e;
+    padding:12px 17px;
+    border:0;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    font-size:14px
+}
+
+.btn-green{background:#16a34a;color:white}
+.btn-orange{background:#f59e0b;color:#111827}
+.btn-blue{background:#2563eb;color:white}
+.btn-gray{background:#334155;color:white}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px
+}
+
+input{
+    width:100%;
+    max-width:300px;
+    background:#071827;
+    color:white;
+    border:1px solid #31516c;
+    padding:12px;
+    border-radius:7px;
+    margin:8px 0
+}
+
+.status{
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:20px;
+    background:#24364c;
+    font-weight:bold
+}
+
+.green{color:#4ade80}
+.orange{color:#fbbf24}
+.red{color:#fb7185}
+
+.info-box{
+    background:#0a1929;
+    border:1px solid #29445d;
+    padding:16px;
+    border-radius:10px;
+    margin-top:15px
+}
+
+@media(max-width:600px){
+    body{padding:12px}
+    .card{padding:17px}
+    .actions a,.actions button{width:100%;text-align:center}
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
-<a href="/records">← Back to Records</a>
+
+<a href="{{ url_for('records') }}">← Back to Records</a>
+
 <div class="card">
-<h1>GENSET #{{record.id}}</h1>
-<p>Status: <b>{{record.status}}</b></p>
 
-<h3>Customer Information</h3>
-<p><span>Name:</span> {{record.customer}}</p>
-<p><span>Mobile:</span> {{record.mobile or '-'}}</p>
-<p><span>Address:</span> {{record.address or '-'}}</p>
+<h1>GENSET #{{ record.id }}</h1>
 
-<h3>Generator Information</h3>
-<p><span>Company:</span> {{record.company or '-'}}</p>
-<p><span>Model:</span> {{record.model or '-'}}</p>
-<p><span>Serial:</span> {{record.serial or '-'}}</p>
-<p><span>KVA:</span> {{record.kva or '-'}}</p>
-
-<h3>Workshop Information</h3>
-<p><span>Complaint:</span> {{record.complaint or '-'}}</p>
-<p><span>Work:</span> {{record.work or '-'}}</p>
-<p><span>Amount:</span> ₹{{record.amount}}</p>
-<p><span>Entry:</span> {{record.entry_date.strftime('%d-%m-%Y %I:%M %p')}}</p>
-
-{% if record.exit_date %}
-<h3>Delivery Information</h3>
-<p><span>Delivered to:</span> {{record.delivered_to or '-'}}</p>
-<p><span>Exit:</span> {{record.exit_date.strftime('%d-%m-%Y %I:%M %p')}}</p>
-{% endif %}
+<p>
+Status:
 
 {% if record.status == "IN SHOP" %}
-<h3>Deliver Genset</h3>
-<form method="POST" action="/deliver/{{record.id}}">
-<input name="delivered_to" placeholder="Delivered to person" required>
-<button type="submit">MARK DELIVERED</button>
-</form>
+<span class="status green">IN SHOP</span>
+{% elif record.status == "ON RENT" %}
+<span class="status orange">ON RENT</span>
+{% else %}
+<span class="status red">DELIVERED</span>
 {% endif %}
+</p>
+
+
+<!-- CUSTOMER INFORMATION -->
+
+<h3>Customer Information</h3>
+
+<p><span>Name:</span> {{ record.customer }}</p>
+<p><span>Mobile:</span> {{ record.mobile or '-' }}</p>
+<p><span>Address:</span> {{ record.address or '-' }}</p>
+
+
+<!-- GENERATOR INFORMATION -->
+
+<h3>Generator Information</h3>
+
+<p><span>Company:</span> {{ record.company or '-' }}</p>
+<p><span>Model:</span> {{ record.model or '-' }}</p>
+<p><span>Serial:</span> {{ record.serial or '-' }}</p>
+<p><span>KVA:</span> {{ record.kva or '-' }}</p>
+
+
+<!-- WORKSHOP INFORMATION -->
+
+<h3>Workshop Information</h3>
+
+<p><span>Complaint:</span> {{ record.complaint or '-' }}</p>
+<p><span>Work:</span> {{ record.work or '-' }}</p>
+<p><span>Amount:</span> ₹{{ "%.2f"|format(record.amount or 0) }}</p>
+
+<p>
+<span>Entry:</span>
+{{ record.entry_date.strftime('%d-%m-%Y %I:%M %p') if record.entry_date else '-' }}
+</p>
+
+
+<!-- DELIVERED INFORMATION -->
+
+{% if record.status == "DELIVERED" %}
+
+<h3>Delivery Information</h3>
+
+<p><span>Delivered To:</span> {{ record.delivered_to or '-' }}</p>
+
+<p>
+<span>Delivery Date:</span>
+{{ record.exit_date.strftime('%d-%m-%Y %I:%M %p') if record.exit_date else '-' }}
+</p>
+
+{% endif %}
+
+
+<!-- RENTAL INFORMATION -->
+
+{% if record.status == "ON RENT" %}
+
+{% set active_rental = record.rental_records|selectattr('status', 'equalto', 'ON RENT')|first %}
+
+<h3>Rental Information</h3>
+
+{% if active_rental %}
+
+<div class="info-box">
+
+<p><span>Rental Customer:</span> {{ active_rental.renter_name }}</p>
+
+<p><span>Mobile:</span> {{ active_rental.renter_mobile or '-' }}</p>
+
+<p><span>Rent Type:</span> {{ active_rental.rate_type }}</p>
+
+<p><span>Rent Rate:</span> ₹{{ "%.2f"|format(active_rental.rate or 0) }}</p>
+
+<p><span>Start Date:</span> {{ active_rental.start_date.strftime('%d-%m-%Y') }}</p>
+
+<p>
+<span>Expected Return:</span>
+{{ active_rental.expected_return_date.strftime('%d-%m-%Y') if active_rental.expected_return_date else 'Not set' }}
+</p>
+
+<p><span>Advance:</span> ₹{{ "%.2f"|format(active_rental.advance or 0) }}</p>
+
+<p><span>Total Paid:</span> ₹{{ "%.2f"|format(active_rental.paid_amount or 0) }}</p>
+
+<p><span>Estimated Total Rent:</span> ₹{{ "%.2f"|format(active_rental.total_rent or 0) }}</p>
+
+<p><span>Pending Balance:</span> ₹{{ "%.2f"|format(active_rental.balance or 0) }}</p>
+
+</div>
+
+{% else %}
+
+<p>Active rental details not found.</p>
+
+{% endif %}
+
+{% endif %}
+
+
+<!-- ACTION BUTTONS -->
+
+<h3>Actions</h3>
+
+<div class="actions">
+
+<a class="btn btn-blue"
+   href="{{ url_for('edit', id=record.id) }}">
+   EDIT GENERATOR
+</a>
+
+{% if record.status == "IN SHOP" %}
+
+<a class="btn btn-orange"
+   href="{{ url_for('rent_generator', genset_id=record.id) }}">
+   RENT GENERATOR
+</a>
+
+<form method="POST"
+      action="{{ url_for('deliver', id=record.id) }}"
+      onsubmit="return confirm('Mark this generator as delivered?');">
+
+<input type="hidden" name="delivered_to" value="{{ record.customer }}">
+
+<button type="submit" class="btn-green">
+MARK DELIVERED
+</button>
+
+</form>
+
+{% elif record.status == "ON RENT" %}
+
+<a class="btn btn-orange"
+   href="{{ url_for('rental_history', genset_id=record.id) }}">
+   RENTAL HISTORY
+</a>
+
+{% elif record.status == "DELIVERED" %}
+
+<a class="btn btn-gray"
+   href="{{ url_for('rental_history', genset_id=record.id) }}">
+   RENTAL HISTORY
+</a>
+
+{% endif %}
+
+</div>
+
 </div>
 </div>
+
 </body>
 </html>
