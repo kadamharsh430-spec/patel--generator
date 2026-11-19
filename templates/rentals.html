@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rental Management | Patel Generator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:22px;background:#07111f;color:#eaf6ff;font-family:Arial,sans-serif}
+.container{max-width:1100px;margin:auto}
+.card{background:#102238;border:1px solid #24415d;border-radius:14px;padding:18px;margin:15px 0}
+h1{margin:0 0 8px}
+a{color:#45d5ff;text-decoration:none}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #29435c}
+th{color:#45d5ff}
+.table-wrap{overflow-x:auto}
+.muted{color:#a9bfd2}
+.btn{display:inline-block;padding:9px 13px;background:#087eae;color:white;border-radius:8px;margin:4px}
+.empty{text-align:center;padding:25px;color:#a9bfd2}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Rental Management</h1>
+    <p class="muted">Patel Generator — Rental Records</p>
+
+    <div class="card">
+        <a class="btn" href="{{ url_for('index') }}">Dashboard</a>
+        <a class="btn" href="{{ url_for('records') }}">All Records</a>
+    </div>
+
+    <div class="card">
+        <h2>Active Rentals</h2>
+        <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Generator ID</th>
+                    <th>Renter</th>
+                    <th>Mobile</th>
+                    <th>Rate Type</th>
+                    <th>Rate</th>
+                    <th>Start Date</th>
+                    <th>Expected Return</th>
+                    <th>Balance</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for rental in rentals %}
+                {% if rental.status == 'ON RENT' %}
+                <tr>
+                    <td>{{ rental.genset_id }}</td>
+                    <td>{{ rental.renter_name }}</td>
+                    <td>{{ rental.renter_mobile or '-' }}</td>
+                    <td>{{ rental.rate_type }}</td>
+                    <td>₹{{ "%.2f"|format(rental.rate or 0) }}</td>
+                    <td>{{ rental.start_date.strftime('%d-%m-%Y') if rental.start_date else '-' }}</td>
+                    <td>{{ rental.expected_return_date.strftime('%d-%m-%Y') if rental.expected_return_date else '-' }}</td>
+                    <td>₹{{ "%.2f"|format(rental.balance or 0) }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_rental', rental_id=rental.id) }}">Edit</a>
+                        |
+                        <a href="{{ url_for('return_rental', rental_id=rental.id) }}">Return</a>
+                    </td>
+                </tr>
+                {% endif %}
+            {% else %}
+                <tr><td colspan="9" class="empty">No rental records found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Rental History</h2>
+        <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Generator ID</th>
+                    <th>Renter</th>
+                    <th>Rate Type</th>
+                    <th>Rate</th>
+                    <th>Status</th>
+                    <th>Total Rent</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for rental in rentals %}
+                <tr>
+                    <td>{{ rental.genset_id }}</td>
+                    <td>{{ rental.renter_name }}</td>
+                    <td>{{ rental.rate_type }}</td>
+                    <td>₹{{ "%.2f"|format(rental.rate or 0) }}</td>
+                    <td>{{ rental.status }}</td>
+                    <td>₹{{ "%.2f"|format(rental.total_rent or 0) }}</td>
+                    <td>₹{{ "%.2f"|format(rental.balance or 0) }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="7" class="empty">No rental history found.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
