@@ -379,7 +379,13 @@ def edit(id):
             db.session.rollback()
             flash("Please enter valid details.", "error")
 
-    return render_template("entry.html", record=record)
+    return render_template("edit.html", record=record)
+
+
+# Backward-compatible endpoint for older templates that still use edit_entry.
+app.add_url_rule(
+    "/edit/<int:id>", endpoint="edit_entry", view_func=edit, methods=["GET", "POST"]
+)
 
 
 # ---------------- GENERATOR DETAILS ----------------
@@ -646,8 +652,10 @@ def rentals():
         desc(Rental.actual_return_date)
     ).all()
 
+    all_rentals = active + returned
     return render_template(
         "rentals.html",
+        rentals=all_rentals,
         active=active,
         returned=returned
     )
