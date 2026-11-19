@@ -1,11 +1,3 @@
-    if return_date < rental.start_date:
-        flash("Return date cannot be before rental start date.", "error")
-        return redirect(url_for("records"))
-
-    rental.actual_return_date = return_date
-    rental.status = "RETURNED"
-    calculate_rent(rental, return_date)
-
     generator = rental.generator
     if generator:
         generator.status = "IN SHOP"
@@ -126,3 +118,8 @@ def customer_history(id):
         "customer_history.html",
         customer=record.customer,
         history=history
+    )
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
