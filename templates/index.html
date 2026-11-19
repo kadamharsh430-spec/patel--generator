@@ -5,84 +5,279 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard | PATEL GENERATOR</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#081321;color:#eaf2ff;font-family:Arial,sans-serif;padding:22px}
-.container{max-width:1200px;margin:auto}
-header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+
+body{
+    margin:0;
+    background:#081321;
+    color:#eaf2ff;
+    font-family:Arial,sans-serif;
+    padding:22px
+}
+
+.container{max-width:1300px;margin:auto}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap
+}
+
 h1{color:#42d9ff}
-a{color:white;text-decoration:none;background:#123b57;padding:11px 15px;border-radius:8px}
-.buttons{display:flex;gap:10px;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:25px 0}
-.card{background:#102237;border:1px solid #29435e;border-radius:13px;padding:20px}
+
+a{
+    color:white;
+    text-decoration:none;
+    background:#123b57;
+    padding:11px 15px;
+    border-radius:8px
+}
+
+a:hover{background:#17618a}
+
+.buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:15px;
+    margin:25px 0
+}
+
+.card{
+    background:#102237;
+    border:1px solid #29435e;
+    border-radius:13px;
+    padding:20px
+}
+
 .card small{color:#9eb9d4}
-.card h2{font-size:30px;margin:12px 0 0;color:#42d9ff}
-.section{margin-top:25px}
-.kvas{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.kva{background:#102237;border:1px solid #29435e;border-radius:12px;padding:17px}
+
+.card h2{
+    font-size:28px;
+    margin:12px 0 0;
+    color:#42d9ff;
+    overflow-wrap:anywhere
+}
+
+.green{color:#4ade80!important}
+.red{color:#fb7185!important}
+.orange{color:#fbbf24!important}
+.purple{color:#c084fc!important}
+
+.section{margin-top:30px}
+
+.section h2{color:#eaf2ff}
+
+.kvas{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px
+}
+
+.kva{
+    background:#102237;
+    border:1px solid #29435e;
+    border-radius:12px;
+    padding:17px;
+    display:block
+}
+
 .kva h3{color:#42d9ff;margin-top:0}
 .kva p{margin:7px 0;color:#b7cce0}
-.table-wrap{overflow-x:auto;background:#102237;border-radius:12px}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{padding:13px;text-align:left;border-bottom:1px solid #29435e}
+
+.table-wrap{
+    overflow-x:auto;
+    background:#102237;
+    border-radius:12px
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px
+}
+
+th,td{
+    padding:13px;
+    text-align:left;
+    border-bottom:1px solid #29435e
+}
+
 th{color:#42d9ff}
+
+.status{
+    font-weight:bold
+}
+
+@media(max-width:600px){
+    body{padding:12px}
+    header{align-items:flex-start}
+    .buttons a{padding:10px;font-size:13px}
+    .card h2{font-size:24px}
+}
 </style>
 </head>
+
 <body>
 <div class="container">
 
 <header>
-<h1>PATEL GENERATOR</h1>
-<div class="buttons">
-<a href="{{ url_for('entry') }}">+ New Entry</a>
-<a href="{{ url_for('records') }}">All Records</a>
-<a href="{{ url_for('customers') }}">Customers</a>
-</div>
+    <h1>PATEL GENERATOR</h1>
+
+    <div class="buttons">
+        <a href="{{ url_for('entry') }}">+ New Entry</a>
+        <a href="{{ url_for('records') }}">All Records</a>
+        <a href="{{ url_for('rentals') }}">Rental Management</a>
+        <a href="{{ url_for('customers') }}">Customers</a>
+    </div>
 </header>
 
+
+<!-- DASHBOARD COUNTS -->
+
 <div class="stats">
-<div class="card"><small>TOTAL GENERATORS</small><h2>{{ total }}</h2></div>
-<div class="card"><small>IN SHOP</small><h2>{{ in_shop }}</h2></div>
-<div class="card"><small>DELIVERED</small><h2>{{ delivered }}</h2></div>
-<div class="card"><small>DELIVERED AMOUNT</small><h2>₹{{ "%.2f"|format(delivered_amount or 0) }}</h2></div>
+
+    <div class="card">
+        <small>TOTAL GENERATORS</small>
+        <h2>{{ total }}</h2>
+    </div>
+
+    <div class="card">
+        <small>IN SHOP</small>
+        <h2 class="green">{{ in_shop }}</h2>
+    </div>
+
+    <div class="card">
+        <small>DELIVERED</small>
+        <h2 class="red">{{ delivered }}</h2>
+    </div>
+
+    <div class="card">
+        <small>ON RENT</small>
+        <h2 class="orange">{{ on_rent }}</h2>
+    </div>
+
+    <div class="card">
+        <small>DELIVERED AMOUNT</small>
+        <h2>₹{{ "%.2f"|format(delivered_amount or 0) }}</h2>
+    </div>
+
+    <div class="card">
+        <small>RENTAL PENDING BALANCE</small>
+        <h2 class="purple">
+            ₹{{ "%.2f"|format(active_rental_balance or 0) }}
+        </h2>
+    </div>
+
 </div>
 
+
+<!-- KVA WISE COUNT -->
+
 <section class="section">
+
 <h2>KVA-WISE GENERATOR COUNT</h2>
+
 <div class="kvas">
+
 {% for item in kva_stats %}
+
 <a class="kva" href="{{ url_for('kva_records', kva=item.kva) }}">
-<h3>{{ item.kva }} KVA</h3>
-<p>Total: <b>{{ item.total }}</b></p>
-<p>IN SHOP: <b>{{ item.inside }}</b></p>
-<p>DELIVERED: <b>{{ item.delivered }}</b></p>
+
+    <h3>{{ item.kva }} KVA</h3>
+
+    <p>Total: <b>{{ item.total }}</b></p>
+
+    <p>IN SHOP:
+        <b class="green">{{ item.in_shop }}</b>
+    </p>
+
+    <p>ON RENT:
+        <b class="orange">{{ item.on_rent }}</b>
+    </p>
+
+    <p>DELIVERED:
+        <b class="red">{{ item.delivered }}</b>
+    </p>
+
 </a>
+
 {% else %}
+
 <div class="card">No generator records yet.</div>
+
 {% endfor %}
+
 </div>
 </section>
 
+
+<!-- RECENT GENERATORS -->
+
 <section class="section">
+
 <h2>RECENT GENERATORS</h2>
+
 <div class="table-wrap">
+
 <table>
+
 <thead>
-<tr><th>ID</th><th>Customer</th><th>Model</th><th>KVA</th><th>Status</th><th>Entry Date</th></tr>
-</thead>
-<tbody>
-{% for r in latest %}
 <tr>
-<td>#{{ r.id }}</td>
-<td>{{ r.customer }}</td>
-<td>{{ r.model or '-' }}</td>
-<td>{{ r.kva or '-' }}</td>
-<td>{{ r.status }}</td>
-<td>{{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}</td>
+    <th>ID</th>
+    <th>Customer</th>
+    <th>Model</th>
+    <th>KVA</th>
+    <th>Status</th>
+    <th>Entry Date</th>
 </tr>
+</thead>
+
+<tbody>
+
+{% for r in latest %}
+
+<tr>
+    <td>#{{ r.id }}</td>
+
+    <td>{{ r.customer }}</td>
+
+    <td>{{ r.model or '-' }}</td>
+
+    <td>{{ r.kva or '-' }}</td>
+
+    <td class="status">
+        {% if r.status == 'IN SHOP' %}
+            <span class="green">IN SHOP</span>
+        {% elif r.status == 'ON RENT' %}
+            <span class="orange">ON RENT</span>
+        {% else %}
+            <span class="red">DELIVERED</span>
+        {% endif %}
+    </td>
+
+    <td>
+        {{ r.entry_date.strftime('%d-%m-%Y') if r.entry_date else '-' }}
+    </td>
+</tr>
+
 {% else %}
-<tr><td colspan="6">No records yet.</td></tr>
+
+<tr>
+    <td colspan="6">No records yet.</td>
+</tr>
+
 {% endfor %}
+
 </tbody>
 </table>
 </div>
