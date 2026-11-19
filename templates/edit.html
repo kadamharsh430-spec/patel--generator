@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit Generator | Patel Generator</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    padding:25px;
+    background:#07111f;
+    color:#eaf6ff;
+    font-family:Arial,sans-serif;
+}
+.container{max-width:850px;margin:auto}
+.card{
+    background:#102238;
+    border:1px solid #24415d;
+    border-radius:16px;
+    padding:25px;
+}
+h1{margin-top:0;color:#45d5ff}
+.subtitle{color:#9bb4ca;margin-bottom:25px}
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+.field{display:flex;flex-direction:column;gap:7px}
+.full{grid-column:1/-1}
+label{color:#b9d3e8;font-size:14px}
+input,select,textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #31516e;
+    border-radius:9px;
+    background:#091a2b;
+    color:white;
+    outline:none;
+    font-size:14px;
+}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{
+    border-color:#45d5ff;
+}
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:25px;
+    flex-wrap:wrap;
+}
+button,.back{
+    border:0;
+    padding:13px 20px;
+    border-radius:9px;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    font-size:14px;
+}
+button{background:#00b8e6;color:#061522}
+.back{background:#263e55;color:white}
+@media(max-width:600px){
+    body{padding:12px}
+    .grid{grid-template-columns:1fr}
+    .full{grid-column:auto}
+    .card{padding:18px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<div class="card">
+
+<h1>Edit Generator</h1>
+<p class="subtitle">PATEL GENERATOR — Update Generator Details</p>
+
+<form method="POST" action="{{ url_for('edit', id=record.id) }}">
+
+<div class="grid">
+
+<div class="field">
+<label>Customer Name</label>
+<input type="text" name="customer"
+value="{{ record.customer or '' }}" required>
+</div>
+
+<div class="field">
+<label>Mobile Number</label>
+<input type="text" name="mobile"
+value="{{ record.mobile or '' }}">
+</div>
+
+<div class="field full">
+<label>Address</label>
+<textarea name="address">{{ record.address or '' }}</textarea>
+</div>
+
+<div class="field">
+<label>Generator Company</label>
+<input type="text" name="company"
+value="{{ record.company or '' }}">
+</div>
+
+<div class="field">
+<label>Model</label>
+<input type="text" name="model"
+value="{{ record.model or '' }}">
+</div>
+
+<div class="field">
+<label>Serial Number</label>
+<input type="text" name="serial"
+value="{{ record.serial or '' }}">
+</div>
+
+<div class="field">
+<label>KVA</label>
+<input type="text" name="kva"
+value="{{ record.kva or '' }}">
+</div>
+
+<div class="field">
+<label>Work Type</label>
+<input type="text" name="work"
+value="{{ record.work or '' }}">
+</div>
+
+<div class="field">
+<label>Amount</label>
+<input type="number" step="0.01" name="amount"
+value="{{ record.amount if record.amount is not none else 0 }}">
+</div>
+
+<div class="field full">
+<label>Complaint / Problem</label>
+<textarea name="complaint">{{ record.complaint or '' }}</textarea>
+</div>
+
+<div class="field">
+<label>Entry Date</label>
+<input type="datetime-local" name="entry_date"
+value="{{ record.entry_date.strftime('%Y-%m-%dT%H:%M') if record.entry_date else '' }}">
+</div>
+
+<div class="field">
+<label>Exit / Delivery Date</label>
+<input type="datetime-local" name="exit_date"
+value="{{ record.exit_date.strftime('%Y-%m-%dT%H:%M') if record.exit_date else '' }}">
+</div>
+
+<div class="field">
+<label>Delivered To</label>
+<input type="text" name="delivered_to"
+value="{{ record.delivered_to or '' }}">
+</div>
+
+<div class="field">
+<label>Status</label>
+<select name="status">
+<option value="IN SHOP" {% if record.status == 'IN SHOP' %}selected{% endif %}>IN SHOP</option>
+<option value="DELIVERED" {% if record.status == 'DELIVERED' %}selected{% endif %}>DELIVERED</option>
+</select>
+</div>
+
+</div>
+
+<div class="actions">
+<button type="submit">SAVE CHANGES</button>
+<a class="back" href="{{ url_for('records') }}">BACK TO RECORDS</a>
+</div>
+
+</form>
+</div>
+</div>
+</body>
+</html>
